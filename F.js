@@ -52,23 +52,30 @@ var F = (function (undefined) {
         initModule: function (module) {
             console.log('initializing module');
  
+            this.assignDefaultProps(module);
             this.resolveSelectors(module);
             this.bindEvents(module);
  
-            module.init();
+            if(module.init && typeof module.init === 'function') {
+                module.init.call(module);
+            }            
  
             return module;
         },
+
+        assignDefaultProps: function(module) {
+            module.el = module.el || 'body';
+            module.$el = $(module.el);
+            module.$ = module.$el.find.bind(module.$el);
+        },
  
         resolveSelectors: function(module) {
-            console.log('resolveSelectors');
+            console.log('Resolving selectors');
             for (var key in module.UI) {
                var val = module.UI[key];
  
-                // important check that this is objects own property
-                // not from prototype prop inherited
                 if(module.UI.hasOwnProperty(key)){
-                    module.UI[key] = module.UI[key] + "tt";
+                    module.UI[key] = module.$(module.UI[key]);
                 }
             }
         },
@@ -158,10 +165,11 @@ App.registerModule("App.Views.Comment", {
     defaults: {
         numArticles: 5
     },
-    el: 'body',
+    el: '#test',
     UI: {
         articleList: '#article-list',
-        moreButton: '#more-button'
+        moreButton: '#more-button',
+        outside: '#outside'
     },
     events: {
         'click a[href=#]': 'handleLink'
