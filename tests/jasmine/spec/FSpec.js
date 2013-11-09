@@ -62,36 +62,3 @@ describe('The F library', function() {
     });
 
 });
-
-
-//----------------------------------//
-
-// F.init("App");
-// App.registerModule("App.Views.Comment", {
-//     defaults: {
-//         numArticles: 5
-//     },
-//     el: '#test',
-//     UI: {
-//         articleList: '#article-list',
-//         moreButton: '#more-button',
-//         outside: '#outside'
-//     },
-//     events: {
-//         'click a[href=#]': 'handleLink'
-//     },
-//     handleLink: function (ev) {
-//         ev.preventDefault();
-//     },
-//     test: function() {
-//         console.log("Test called");
-//     },
-//     init: function() {
-//         this.test();
-//         this.a = 10;
-//     }
-// });
-
-// console.log(App.Views.Comment);
-
-// App.Views.Comment.test();
