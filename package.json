@@ -1,0 +1,19 @@
+{
+  "name": "F",
+  "version": "0.0.0",
+  "description": "The F library",
+  "main": "F.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Riccardo Coppola ricca509@gmail.com",
+  "license": "BSD",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-jshint": "~0.7.1",
+    "grunt-contrib-jasmine": "~0.5.2"
+  }
+}

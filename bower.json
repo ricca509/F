@@ -1,0 +1,23 @@
+{
+  "name": "F",
+  "main": "F.js",
+  "version": "0.0.0",
+  "description": "The F library",
+  "authors": [
+    "Riccardo Coppola <ricca509@gmail.com>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.0.3",
+    "underscore": "~1.5.2"
+  }
+}

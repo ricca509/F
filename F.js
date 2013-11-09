@@ -1,4 +1,4 @@
-var F = (function (undefined) {
+;(function (undefined) {
     // This is the constructor function. It will be attached to the window object
     // and executed every time we call F(...). Returns a new 'instance' of the library.
     var root, slice, bind, bindAll, pageModule,
@@ -7,40 +7,40 @@ var F = (function (undefined) {
         };
 
     root = this;
- 
+
     slice = Array.prototype.slice;
 
     bind = Function.prototype.bind || function (obj) {
         var target, args, bound;
- 
+
         target = this;
         args = slice.call(arguments, 1);
         bound = function () {
             var F, self;
- 
+
             if (this instanceof bound) {
                 F = function () {};
                 F.prototype = target.prototype;
-                self = new F;
- 
+                self = new F();
+
                 result = target.apply(self, args.concat(slice.call(arguments)));
- 
+
                 if (Object(result) === result) {
                     return result;
                 }
- 
+
                 return self;
             } else {
                 return target.apply(obj, args.concat(slice.call(arguments)));
             }
         };
- 
+
         return bound;
     };
- 
+
     bindAll = function (obj) {
         var key;
- 
+
         for (key in obj) {
             if (obj.hasOwnProperty(key) && typeof obj[key] == "function") {
                 obj[key] = bind.call(obj[key], obj);
@@ -51,15 +51,15 @@ var F = (function (undefined) {
     pageModule = {
         initModule: function (module) {
             console.log('initializing module');
- 
+
             this.assignDefaultProps(module);
             this.resolveSelectors(module);
             this.bindEvents(module);
- 
+
             if(module.init && typeof module.init === 'function') {
                 module.init.call(module);
-            }            
- 
+            }
+
             return module;
         },
 
@@ -68,18 +68,18 @@ var F = (function (undefined) {
             module.$el = $(module.el);
             module.$ = module.$el.find.bind(module.$el);
         },
- 
+
         resolveSelectors: function(module) {
             console.log('Resolving selectors');
             for (var key in module.UI) {
                var val = module.UI[key];
- 
+
                 if(module.UI.hasOwnProperty(key)){
-                    module.UI[key] = module.$(module.UI[key]);
+                    module.UI['$' + key] = module.$(module.UI[key]);
                 }
             }
         },
- 
+
         bindEvents: function(module) {
             if (!module.events) {
                 return;
@@ -121,7 +121,7 @@ var F = (function (undefined) {
             root[namespace] = this;
         }
     };
- 
+
     F.registerModule = function (namespaces, module, callback) {
         var i, l, baseObj;
 
@@ -154,38 +154,5 @@ var F = (function (undefined) {
     F.fn.init.prototype = F.fn;
 
     // Attach the constructor function to the window object
-    return root.F = F;
+    root.F = F;
 }).call(this);
-
-
-//----------------------------------//
- 
-F.init("App");
-App.registerModule("App.Views.Comment", {
-    defaults: {
-        numArticles: 5
-    },
-    el: '#test',
-    UI: {
-        articleList: '#article-list',
-        moreButton: '#more-button',
-        outside: '#outside'
-    },
-    events: {
-        'click a[href=#]': 'handleLink'
-    },
-    handleLink: function (ev) {
-        ev.preventDefault();
-    },
-    test: function() {
-        console.log("Test called");
-    },
-    init: function() {
-        this.test();
-        this.a = 10;
-    }
-});
- 
-console.log(App.Views.Comment);
- 
-App.Views.Comment.test();
