@@ -33,6 +33,7 @@ describe('The F library', function() {
     it('assign the object a "default" type', function(){
         F.defineModule("F.Tests.Module2");
         expect(F.Tests.Module2.type).toBeDefined();
+        expect(F.Tests.Module2.type).toBe('default');
     });
 
     it('can create an instance of an existing module ' +
@@ -46,8 +47,9 @@ describe('The F library', function() {
     });
 
     it('can extend the standard instance of a module with additional configuration. ' +
-       'Useful to define the root "el" element for every module in a loop.' +
+       'Useful to define the root "el" element for every module we instantiate in a loop.' +
        'e.g. "var instance = F.createInstance(F.Tests.TestModule, {el: \'body\'});"', function() {
+        expect(F.Tests.TestModule.el).toBe('#test');
         var instance = F.createInstance(F.Tests.TestModule, {
             el: 'body'
         });
