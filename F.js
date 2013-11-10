@@ -48,48 +48,68 @@
         }
     };
 
-    pageModule = {
-        initModule: function (module) {
-            console.log('initializing module');
+    initModule = function(module) {
+        module.type = module.type || 'default';
+        return module;
+    };
 
-            this.assignDefaultProps(module);
-            this.resolveSelectors(module);
-            this.bindEvents(module);
+    // Plugins object for extendibility
+    F.plugins = {};
 
-            if(module.init && typeof module.init === 'function') {
-                module.init.call(module);
+    // Exposed utility methods
+    F.init = function (namespace) {
+        if (root.F) {
+            try {
+                delete root.F;
+            } catch (ex) {
+                root.F = undefined;
             }
 
-            return module;
-        },
-
-        assignDefaultProps: function(module) {
-            module.el = module.el || 'body';
-            module.$el = $(module.el);
-            module.$ = module.$el.find.bind(module.$el);
-        },
-
-        resolveSelectors: function(module) {
-            console.log('Resolving selectors');
-            for (var key in module.UI) {
-               var val = module.UI[key];
-
-                if(module.UI.hasOwnProperty(key)){
-                    module.UI['$' + key] = module.$(module.UI[key]);
-                }
-            }
-        },
-
-        bindEvents: function(module) {
-            if (!module.events) {
-                return;
-            }
-            for (var ev in module.events) {
-                if(module.events.hasOwnProperty(ev)){
-                    console.log('Binding: ' + module.events[ev] + ' to ' + ev);
-                }
-            }
+            root[namespace] = this;
         }
+    };
+
+    // Defines an object in the given namespace
+    F.defineModule = function (namespaces, module, callback) {
+        var i, l, baseObj;
+
+        baseObj = root;
+        namespaces = namespaces.split(/\./);
+        l = namespaces.length;
+
+        for (i = 0; i < l; i++) {
+            if (!baseObj[namespaces[i]]) {
+                if (i === l - 1 && module) {
+                    baseObj[namespaces[i]] = initModule(module);
+                } else {
+                    baseObj[namespaces[i]] = initModule({});
+                }
+            }
+
+            baseObj = baseObj[namespaces[i]];
+        }
+
+        bindAll(module);
+
+        if (callback) {
+            callback(module);
+        }
+    };
+
+    F.createInstance = function(module, opts) {
+        var newMod = _.extend({}, module, opts),
+            handlerName = newMod.type + 'Module',
+            moduleHandler = F.plugins[handlerName];
+
+        // Delegate instantiation
+        if(!_.isUndefined(moduleHandler) && _.isFunction(moduleHandler.initModule)) {
+            // Call the right handler, passing the handler itself as a scope
+            return moduleHandler.initModule.call(moduleHandler, newMod);
+        } else {
+            console.log('No handler found for ' + handlerName + ' module');
+        }
+
+        return undefined;
     };
 
     // Create the 'fn' object which is the same as 'prototype' to enable a simpler way to extend the library
@@ -109,45 +129,6 @@
         }
     };
 
-    // Utility methods
-    F.init = function (namespace) {
-        if (root.F) {
-            try {
-                delete root.F;
-            } catch (ex) {
-                root.F = undefined;
-            }
-
-            root[namespace] = this;
-        }
-    };
-
-    F.registerModule = function (namespaces, module, callback) {
-        var i, l, baseObj;
-
-        baseObj = root;
-        namespaces = namespaces.split(/\./);
-        l = namespaces.length;
-
-        for (i = 0; i < l; i++) {
-            if (!baseObj[namespaces[i]]) {
-                if (i === l - 1 && module) {
-                    baseObj[namespaces[i]] = pageModule.initModule(module);
-                } else {
-                    baseObj[namespaces[i]] = {};
-                }
-            }
-
-            baseObj = baseObj[namespaces[i]];
-        }
-
-        bindAll(module);
-
-        if (callback) {
-            callback(module);
-        }
-    };
-
     // The prototype object provides shared properties for other objects:
     // assigning the 'F' prototype to the 'init' prototype I'm sure the object
     // I return has all the methods declared for F
@@ -156,3 +137,61 @@
     // Attach the constructor function to the window object
     root.F = F;
 }).call(this);
+
+// Plugins
+// TODO: To be removed in core modules
+
+// Module handlers
+// The method that has to be present is the initModule, called by the core F lib
+
+// Default Module
+F.plugins.defaultModule = {
+    initModule: function (module) {
+        return module;
+    }
+};
+
+// Page Module
+F.plugins.pageModule = {
+    initModule: function (module) {
+        console.log('initializing module');
+
+        this.assignDefaultProps(module);
+        this.resolveSelectors(module);
+        this.bindEvents(module);
+
+        if(!_.isUndefined(module.init) && _.isFunction(module.init)) {
+            module.init.call(module);
+        }
+
+        return module;
+    },
+
+    assignDefaultProps: function(module) {
+        module.el = module.el || 'body';
+        module.$el = $(module.el);
+        module.$ = module.$el.find.bind(module.$el);
+    },
+
+    resolveSelectors: function(module) {
+        console.log('Resolving selectors');
+        for (var key in module.UI) {
+           var val = module.UI[key];
+
+            if(module.UI.hasOwnProperty(key)){
+                module.UI['$' + key] = module.$(module.UI[key]);
+            }
+        }
+    },
+
+    bindEvents: function(module) {
+        if (!module.events) {
+            return;
+        }
+        for (var ev in module.events) {
+            if(module.events.hasOwnProperty(ev)){
+                console.log('Binding: ' + module.events[ev] + ' to ' + ev);
+            }
+        }
+    }
+};
