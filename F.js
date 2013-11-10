@@ -96,15 +96,25 @@
         }
     };
 
-    F.createInstance = function(module, opts) {
+    F.createInstance = function(module, opts, onBeforeCreate, onAfterCreate) {
         var newMod = _.extend({}, module, opts),
             handlerName = newMod.type + 'Module',
-            moduleHandler = F.plugins[handlerName];
+            moduleHandler = F.plugins[handlerName],
+            decoratedModule;
 
         // Delegate instantiation
         if(!_.isUndefined(moduleHandler) && _.isFunction(moduleHandler.initModule)) {
+            if(!_.isUndefined(onBeforeCreate) && _.isFunction(onBeforeCreate)) {
+                onBeforeCreate.call(newMod, newMod);
+            }
             // Call the right handler, passing the handler itself as a scope
-            return moduleHandler.initModule.call(moduleHandler, newMod);
+            decoratedModule = moduleHandler.initModule.call(moduleHandler, newMod);
+
+            if(!_.isUndefined(onAfterCreate) && _.isFunction(onAfterCreate)) {
+                onAfterCreate.call(newMod, newMod);
+            }
+
+            return decoratedModule;
         } else {
             console.log('No handler found for ' + handlerName + ' module');
         }

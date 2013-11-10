@@ -79,6 +79,28 @@ describe('The F library', function() {
         expect(instance.UI.$outside.length).toBe(0);
     });
 
+    it('calls before and after callbacks if provided', function() {
+        var callbacks = {
+            onBefore: function(module) {
+                console.log('Before');
+                console.log(module);
+            },
+            onAfter: function(module) {
+                console.log('After');
+                console.log(module);
+            }
+        };
+        spyOn(callbacks, "onBefore");
+        spyOn(callbacks, "onAfter");
+        var instance = F.createInstance(F.Tests.TestModule, {},
+            callbacks.onBefore, callbacks.onAfter);
+
+        expect(callbacks.onBefore).toHaveBeenCalled();
+        expect(callbacks.onAfter).toHaveBeenCalled();
+        expect(callbacks.onBefore.calls.length).toEqual(1);
+        expect(callbacks.onAfter.calls.length).toEqual(1);
+    });
+
     it('can be register under any other name', function() {
         F.init("App");
         expect(window.App).not.toBeUndefined();
