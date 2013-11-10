@@ -1,7 +1,7 @@
 ;(function (undefined) {
     // This is the constructor function. It will be attached to the window object
     // and executed every time we call F(...). Returns a new 'instance' of the library.
-    var root, slice, bind, bindAll,
+    var root, slice, bind, bindAll, resolveNamespace, initModule,
         F = function (args) {
             return new F.fn.init(args);
         };
@@ -46,6 +46,17 @@
                 obj[key] = bind.call(obj[key], obj);
             }
         }
+    };
+
+    resolveNamespace = function(nsString) {
+        var ns = nsString.split('.'),
+            obj = window;
+
+        for (var i = 0, len = ns.length; i < len; ++i) {
+            obj = obj[ns[i]];
+        }
+
+        return obj;
     };
 
     initModule = function(module) {
@@ -100,6 +111,12 @@
     };
 
     F.createInstance = function(module, opts, onBeforeCreate, onAfterCreate) {
+        // An object shall be passed.
+        if (!_.isObject(module)) {
+            if (_.isString(module)) {
+                module = resolveNamespace(module);
+            }
+        }
         var newMod = _.extend({}, module, opts),
             handlerName = newMod.type + 'Module',
             moduleHandler = F.plugins[handlerName],
@@ -122,7 +139,7 @@
             console.log('No handler found for ' + handlerName + ' module');
         }
 
-        return undefined;
+        return;
     };
 
     // Create the 'fn' object which is the same as 'prototype' to enable a simpler way to extend the library

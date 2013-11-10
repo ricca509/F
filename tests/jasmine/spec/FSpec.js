@@ -48,6 +48,12 @@ describe('The F library', function() {
         expect(instance.el).toBe('#test');
     });
 
+    it('can create an instance of an existing module ' +
+       'even if the string representing the namespace is passed (\'F.Tests.TestModule\')', function() {
+        var instance = F.createInstance('F.Tests.TestModule');
+        expect(instance.type).toBeDefined();
+    });
+
     it('can extend the standard instance of a module with additional configuration. ' +
        'Useful to define the root "el" element for every module we instantiate in a loop.' +
        'e.g. "var instance = F.createInstance(F.Tests.TestModule, {el: \'body\'});"', function() {
