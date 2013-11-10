@@ -27,7 +27,9 @@ describe('The F library', function() {
 
     it('can create an object given a complex namespace ("F.Tests.Module1")', function(){
         F.defineModule("F.Tests.Module1");
+        expect(F.Tests.type).not.toBeDefined();
         expect(F.Tests.Module1).toBeDefined();
+        expect(F.Tests.Module1.type).toBeDefined();
     });
 
     it('assign the object a "default" type', function(){

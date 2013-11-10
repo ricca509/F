@@ -1,7 +1,7 @@
 ;(function (undefined) {
     // This is the constructor function. It will be attached to the window object
     // and executed every time we call F(...). Returns a new 'instance' of the library.
-    var root, slice, bind, bindAll, pageModule,
+    var root, slice, bind, bindAll,
         F = function (args) {
             return new F.fn.init(args);
         };
@@ -77,12 +77,15 @@
         namespaces = namespaces.split(/\./);
         l = namespaces.length;
 
+        // Fallback to an empty object
+        module = module || {};
+
         for (i = 0; i < l; i++) {
             if (!baseObj[namespaces[i]]) {
                 if (i === l - 1 && module) {
                     baseObj[namespaces[i]] = initModule(module);
                 } else {
-                    baseObj[namespaces[i]] = initModule({});
+                    baseObj[namespaces[i]] = {};
                 }
             }
 
