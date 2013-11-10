@@ -111,10 +111,12 @@
     };
 
     F.createInstance = function(module, opts, onBeforeCreate, onAfterCreate) {
-        // An object shall be passed.
+        // An object or string shall be passed.
         if (!_.isObject(module)) {
             if (_.isString(module)) {
                 module = resolveNamespace(module);
+            } else {
+                return;
             }
         }
         var newMod = _.extend({}, module, opts),
