@@ -15,7 +15,9 @@ module.exports = function(grunt) {
         },
         concat: {
             dist: {
-                src: ['F.js', 'F.plugins.defaultModule.js', 'F.plugins.pageModule.js'],
+                src: ['src/F.js', 
+                    'src/plugins/F.plugins.defaultModule.js', 
+                    'src/plugins/F.plugins.pageModule.js'],
                 dest: 'dist/F.js',
             },
         },
@@ -24,13 +26,20 @@ module.exports = function(grunt) {
                 files: '*.js',
                 tasks: ['concat']
             }
+        },
+        uglify: {
+            my_target: {
+                files: {
+                    'dist/F.min.js': ['dist/F.js']
+                }
+            }
         }
 
     });
 
     grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-jasmine');
     grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     grunt.registerTask('default', ['jshint']);
