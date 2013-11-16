@@ -32,13 +32,43 @@ F.plugins.pageModule = {
     },
 
     bindEvents: function(module) {
+        var selectorLeft, handler, parsedEventSelector;
         if (!module.events) {
             return;
         }
-        for (var ev in module.events) {
-            if(module.events.hasOwnProperty(ev)){
-                console.log('Binding: ' + module.events[ev] + ' to ' + ev);
+        for (selectorLeft in module.events) {
+            if(module.events.hasOwnProperty(selectorLeft)){
+                handler = this.resolveEventHandler(module, module.events[selectorLeft]);
+                parsedEventSelector = this.parseEventSelector(selectorLeft);
+                module.$el.on(parsedEventSelector.ev,
+                              parsedEventSelector.selector,
+                              handler);
+
+                console.log(module.$el.selector + '.on("' +
+                            parsedEventSelector.ev + '", "' +
+                            parsedEventSelector.selector + '", ' +
+                            'function' + ');');
             }
         }
+    },
+
+    parseEventSelector: function(eventSelector) {
+        console.log('parseEventSelector ' + eventSelector);
+        var ev, selector,
+            splitEventSelector = eventSelector.split(' ');
+        ev = _.first(splitEventSelector);
+        selector = _.rest(splitEventSelector, 1).join(' ');
+
+        return {
+            ev: ev,
+            selector: selector
+        };
+    },
+
+    resolveEventHandler: function(module, handlerName) {
+        if (_.isUndefined(module[handlerName]) || !_.isFunction(module[handlerName])) {
+            return;
+        }
+        return module[handlerName];
     }
 };

@@ -1,7 +1,7 @@
 ;(function (undefined) {
     // This is the constructor function. It will be attached to the window object
     // and executed every time we call F(...). Returns a new 'instance' of the library.
-    var root, slice, bind, bindAll, resolveNamespace, initModule,
+    var root, slice, bindAll, resolveNamespace, initModule,
         F = function (args) {
             return new F.fn.init(args);
         };
@@ -10,40 +10,12 @@
 
     slice = Array.prototype.slice;
 
-    bind = Function.prototype.bind || function (obj) {
-        var target, args, bound;
-
-        target = this;
-        args = slice.call(arguments, 1);
-        bound = function () {
-            var F, self;
-
-            if (this instanceof bound) {
-                F = function () {};
-                F.prototype = target.prototype;
-                self = new F();
-
-                result = target.apply(self, args.concat(slice.call(arguments)));
-
-                if (Object(result) === result) {
-                    return result;
-                }
-
-                return self;
-            } else {
-                return target.apply(obj, args.concat(slice.call(arguments)));
-            }
-        };
-
-        return bound;
-    };
-
     bindAll = function (obj) {
         var key;
 
         for (key in obj) {
-            if (obj.hasOwnProperty(key) && typeof obj[key] == "function") {
-                obj[key] = bind.call(obj[key], obj);
+            if (obj.hasOwnProperty(key) && _.isFunction(obj[key])) {
+                obj[key] = _.bind(obj[key], obj);
             }
         }
     };
@@ -99,13 +71,14 @@
                     baseObj[namespaces[i]] = {};
                 }
             }
-
             baseObj = baseObj[namespaces[i]];
         }
 
         bindAll(module);
 
-        if (callback) {
+        if (!_.isUndefined(callback) && _.isFunction(callback)) {
+            // TODO: check this to invoke the callback with apply and pass the
+            // right context (this)
             callback(module);
         }
     };
@@ -155,7 +128,6 @@
                 return this;
             } else {
                 this.args = args;
-
                 return this;
             }
         }
@@ -170,7 +142,5 @@
     root.F = F;
 }).call(this);
 
-// Module handlers
-// The method that has to be present is the initModule, called by the core F lib
 
 
