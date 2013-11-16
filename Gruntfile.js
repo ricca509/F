@@ -24,11 +24,11 @@ module.exports = function(grunt) {
         watch: {
             dist: {
                 files: ['src/**/*.js'],
-                tasks: ['jshint', 'concat', 'strip']
+                tasks: ['jshint', 'concat', 'strip', 'uglify']
             }
         },
         uglify: {
-            my_target: {
+            f_library: {
                 files: {
                     'dist/F.min.js': ['dist/F.js']
                 }
