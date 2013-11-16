@@ -207,14 +207,11 @@ F.plugins.pageModule = {
 
     parseEventSelector: function(eventSelector) {
         0;
-        var ev, selector,
-            splitEventSelector = eventSelector.split(' ');
-        ev = _.first(splitEventSelector);
-        selector = _.rest(splitEventSelector, 1).join(' ');
+        var splitEventSelector = eventSelector.split(' ');
 
         return {
-            ev: ev,
-            selector: selector
+            ev: _.first(splitEventSelector),
+            selector: _.rest(splitEventSelector, 1).join(' ')
         };
     },
 
