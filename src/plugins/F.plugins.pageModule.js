@@ -17,7 +17,7 @@ F.plugins.pageModule = {
     assignDefaultProps: function(module) {
         module.el = module.el || 'body';
         module.$el = $(module.el);
-        module.$ = module.$el.find.bind(module.$el);
+        module.$ = _.bind(module.$el.find, module.$el);
     },
 
     resolveSelectors: function(module) {
