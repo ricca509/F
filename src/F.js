@@ -14,7 +14,7 @@
         var key;
 
         for (key in obj) {
-            if (obj.hasOwnProperty(key) && _.isFunction(obj[key])) {
+            if (_.has(obj, key) && _.isFunction(obj[key])) {
                 obj[key] = _.bind(obj[key], obj);
             }
         }
@@ -74,7 +74,7 @@
             baseObj = baseObj[namespaces[i]];
         }
 
-        bindAll(module);
+        //bindAll(module);
 
         if (!_.isUndefined(callback) && _.isFunction(callback)) {
             // TODO: check this to invoke the callback with apply and pass the
@@ -101,12 +101,13 @@
         if(!_.isUndefined(moduleHandler) && _.isFunction(moduleHandler.initModule)) {
             if(!_.isUndefined(onBeforeCreate) && _.isFunction(onBeforeCreate)) {
                 onBeforeCreate.call(newMod, newMod);
+
             }
             // Call the right handler, passing the handler itself as a scope
             decoratedModule = moduleHandler.initModule.call(moduleHandler, newMod);
 
             if(!_.isUndefined(onAfterCreate) && _.isFunction(onAfterCreate)) {
-                onAfterCreate.call(newMod, newMod);
+                onAfterCreate.call(decoratedModule, decoratedModule);
             }
 
             return decoratedModule;
