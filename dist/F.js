@@ -158,7 +158,6 @@ F.plugins.defaultModule = {
 // Page Module
 F.plugins.pageModule = {
     initModule: function (module) {
-        0;
 
         this.assignDefaultProps(module);
         this.resolveSelectors(module);
@@ -178,15 +177,15 @@ F.plugins.pageModule = {
     },
 
     resolveSelectors: function(module) {
-        0;
-        for (var key in module.UI) {
-           var val = module.UI[key];
-
-            if(module.UI.hasOwnProperty(key)){
-                module.UI['$' + key] = module.$(module.UI[key]);
+        var key,
+            newSelectors = {};
+        for (key in module.UI) {           
+            if(_.has(module.UI, key)){
+                newSelectors['$' + key] = module.$(module.UI[key]);                
             }
         }
-    },
+        _.extend(module.UI, newSelectors);
+    },    
 
     bindEvents: function(module) {
         var selectorLeft, handler, parsedEventSelector;
@@ -195,19 +194,19 @@ F.plugins.pageModule = {
         }
         for (selectorLeft in module.events) {
             if(module.events.hasOwnProperty(selectorLeft)){
+                // Binding the event: 'this' will be the module, not the jQuery
+                // element
                 handler = this.resolveEventHandler(module, module.events[selectorLeft]);
                 parsedEventSelector = this.parseEventSelector(selectorLeft);
                 module.$el.on(parsedEventSelector.ev,
                               parsedEventSelector.selector,
-                              handler);
-
-                0;
+                              _.bind(handler, module));
+                
             }
         }
     },
 
-    parseEventSelector: function(eventSelector) {
-        0;
+    parseEventSelector: function(eventSelector) {        
         var splitEventSelector = eventSelector.split(' ');
 
         return {
