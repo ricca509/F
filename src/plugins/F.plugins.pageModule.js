@@ -1,7 +1,6 @@
 // Page Module
 F.plugins.pageModule = {
     initModule: function (module) {
-        console.log('initializing module');
 
         this.assignDefaultProps(module);
         this.resolveSelectors(module);
@@ -21,15 +20,15 @@ F.plugins.pageModule = {
     },
 
     resolveSelectors: function(module) {
-        console.log('Resolving selectors');
-        for (var key in module.UI) {
-           var val = module.UI[key];
-
-            if(module.UI.hasOwnProperty(key)){
-                module.UI['$' + key] = module.$(module.UI[key]);
+        var key,
+            newSelectors = {};
+        for (key in module.UI) {           
+            if(_.has(module.UI, key)){
+                newSelectors['$' + key] = module.$(module.UI[key]);                
             }
         }
-    },
+        _.extend(module.UI, newSelectors);
+    },    
 
     bindEvents: function(module) {
         var selectorLeft, handler, parsedEventSelector;
@@ -38,22 +37,19 @@ F.plugins.pageModule = {
         }
         for (selectorLeft in module.events) {
             if(module.events.hasOwnProperty(selectorLeft)){
+                // Binding the event: 'this' will be the module, not the jQuery
+                // element
                 handler = this.resolveEventHandler(module, module.events[selectorLeft]);
                 parsedEventSelector = this.parseEventSelector(selectorLeft);
                 module.$el.on(parsedEventSelector.ev,
                               parsedEventSelector.selector,
-                              handler);
-
-                console.log(module.$el.selector + '.on("' +
-                            parsedEventSelector.ev + '", "' +
-                            parsedEventSelector.selector + '", ' +
-                            'function' + ');');
+                              _.bind(handler, module));
+                
             }
         }
     },
 
-    parseEventSelector: function(eventSelector) {
-        console.log('parseEventSelector ' + eventSelector);
+    parseEventSelector: function(eventSelector) {        
         var splitEventSelector = eventSelector.split(' ');
 
         return {
