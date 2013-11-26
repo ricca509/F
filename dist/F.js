@@ -1,7 +1,7 @@
 ;(function (undefined) {
     // This is the constructor function. It will be attached to the window object
     // and executed every time we call F(...). Returns a new 'instance' of the library.
-    var root, slice, bindAll, resolveNamespace, initModule,
+    var root, slice, resolveNamespace, initModule,
         F = function (args) {
             return new F.fn.init(args);
         };
@@ -9,16 +9,6 @@
     root = this;
 
     slice = Array.prototype.slice;
-
-    bindAll = function (obj) {
-        var key;
-
-        for (key in obj) {
-            if (_.has(obj, key) && _.isFunction(obj[key])) {
-                obj[key] = _.bind(obj[key], obj);
-            }
-        }
-    };
 
     resolveNamespace = function(nsString) {
         var ns = nsString.split('.'),
@@ -73,8 +63,6 @@
             }
             baseObj = baseObj[namespaces[i]];
         }
-
-        //bindAll(module);
 
         if (!_.isUndefined(callback) && _.isFunction(callback)) {
             // TODO: check this to invoke the callback with apply and pass the
@@ -179,34 +167,34 @@ F.plugins.pageModule = {
     resolveSelectors: function(module) {
         var key,
             newSelectors = {};
-        for (key in module.UI) {           
+        for (key in module.UI) {
             if(_.has(module.UI, key)){
-                newSelectors['$' + key] = module.$(module.UI[key]);                
+                newSelectors['$' + key] = module.$(module.UI[key]);
             }
         }
         _.extend(module.UI, newSelectors);
-    },    
+    },
 
     bindEvents: function(module) {
-        var selectorLeft, handler, parsedEventSelector;
+        var eventsLeft, handler, parsedEventSelector;
         if (!module.events) {
             return;
         }
-        for (selectorLeft in module.events) {
-            if(module.events.hasOwnProperty(selectorLeft)){
+        for (eventsLeft in module.events) {
+            if(_.has(module.events, eventsLeft)){
                 // Binding the event: 'this' will be the module, not the jQuery
                 // element
-                handler = this.resolveEventHandler(module, module.events[selectorLeft]);
-                parsedEventSelector = this.parseEventSelector(selectorLeft);
+                handler = this.resolveEventHandler(module, module.events[eventsLeft]);
+                parsedEventSelector = this.parseEventSelector(eventsLeft);
                 module.$el.on(parsedEventSelector.ev,
                               parsedEventSelector.selector,
                               _.bind(handler, module));
-                
+
             }
         }
     },
 
-    parseEventSelector: function(eventSelector) {        
+    parseEventSelector: function(eventSelector) {
         var splitEventSelector = eventSelector.split(' ');
 
         return {

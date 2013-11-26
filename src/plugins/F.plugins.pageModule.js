@@ -22,34 +22,34 @@ F.plugins.pageModule = {
     resolveSelectors: function(module) {
         var key,
             newSelectors = {};
-        for (key in module.UI) {           
+        for (key in module.UI) {
             if(_.has(module.UI, key)){
-                newSelectors['$' + key] = module.$(module.UI[key]);                
+                newSelectors['$' + key] = module.$(module.UI[key]);
             }
         }
         _.extend(module.UI, newSelectors);
-    },    
+    },
 
     bindEvents: function(module) {
-        var selectorLeft, handler, parsedEventSelector;
+        var eventsLeft, handler, parsedEventSelector;
         if (!module.events) {
             return;
         }
-        for (selectorLeft in module.events) {
-            if(module.events.hasOwnProperty(selectorLeft)){
+        for (eventsLeft in module.events) {
+            if(_.has(module.events, eventsLeft)){
                 // Binding the event: 'this' will be the module, not the jQuery
                 // element
-                handler = this.resolveEventHandler(module, module.events[selectorLeft]);
-                parsedEventSelector = this.parseEventSelector(selectorLeft);
+                handler = this.resolveEventHandler(module, module.events[eventsLeft]);
+                parsedEventSelector = this.parseEventSelector(eventsLeft);
                 module.$el.on(parsedEventSelector.ev,
                               parsedEventSelector.selector,
                               _.bind(handler, module));
-                
+
             }
         }
     },
 
-    parseEventSelector: function(eventSelector) {        
+    parseEventSelector: function(eventSelector) {
         var splitEventSelector = eventSelector.split(' ');
 
         return {

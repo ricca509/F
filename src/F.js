@@ -1,7 +1,7 @@
 ;(function (undefined) {
     // This is the constructor function. It will be attached to the window object
     // and executed every time we call F(...). Returns a new 'instance' of the library.
-    var root, slice, bindAll, resolveNamespace, initModule,
+    var root, slice, resolveNamespace, initModule,
         F = function (args) {
             return new F.fn.init(args);
         };
@@ -9,16 +9,6 @@
     root = this;
 
     slice = Array.prototype.slice;
-
-    bindAll = function (obj) {
-        var key;
-
-        for (key in obj) {
-            if (_.has(obj, key) && _.isFunction(obj[key])) {
-                obj[key] = _.bind(obj[key], obj);
-            }
-        }
-    };
 
     resolveNamespace = function(nsString) {
         var ns = nsString.split('.'),
@@ -73,8 +63,6 @@
             }
             baseObj = baseObj[namespaces[i]];
         }
-
-        //bindAll(module);
 
         if (!_.isUndefined(callback) && _.isFunction(callback)) {
             // TODO: check this to invoke the callback with apply and pass the
