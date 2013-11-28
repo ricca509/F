@@ -202,7 +202,7 @@ F.plugins.pageModule = {
 
     parseSelectors: function(module, key) {
         var rightSide = module.events[key];
-        var selectorsList = _.without(rightSide, _.last(rightSide))[0].split(',');
+        var selectorsList = _.first(_.without(rightSide, _.last(rightSide))).split(',');
         var cached = [], external = [], internal = [];
 
         _.each(selectorsList, function(selector, idx) {
