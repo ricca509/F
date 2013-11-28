@@ -25,25 +25,38 @@ describe('The plugin F.plugins.pageModule', function() {
 
     it('binds events to selectors', function() {
         var test = 0, handlers = {
-            eventHandler: function() {
+            eventHandler: function(e) {
                 test++;
-                console.log(test);
             }
         };
         F.defineModule('Tests.eventsMod', {
             type: 'page',
+            el: '#test',
+            UI: {
+                link: 'a[href="#"]'
+            },
             events: {
-                'click ul#list>li.list span, a[href="#"]': 'eventHandler'
+                'click, hover': ['ul#list>li.list span, this.UI.link, @#outside', 'eventHandler']
             },
             eventHandler: handlers.eventHandler
         });
 
         var evMod = F.createInstance(Tests.eventsMod);
 
-        evMod.$('ul#list>li.list span').eq(0).click();
+        // Click on internal selector
+        evMod.$('ul#list>li.list span').eq(0).trigger('click');
         expect(test).toBe(1);
 
-        evMod.$('a[href="#"]').eq(0).click();
+        // Click on cached element
+        evMod.$('a[href="#"]').eq(0).trigger('click');
         expect(test).toBe(2);
+
+        // Click on external element
+        $('#outside').eq(0).trigger('click');
+        expect(test).toBe(3);
+
+        // Hover on external element
+        $('#outside').eq(0).trigger('hover');
+        expect(test).toBe(4);
     });
 });
