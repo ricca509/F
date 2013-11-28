@@ -26,9 +26,6 @@
         return module;
     };
 
-    // Plugins object for extendibility
-    F.plugins = {};
-
     // Exposed utility methods
     F.init = function (namespace) {
         if (root.F) {
@@ -106,6 +103,10 @@
         return;
     };
 
+    F.trim = function(str) {
+        return str.replace(/(^\s+|\s+$)/g,'');
+    };
+
     // Create the 'fn' object which is the same as 'prototype' to enable a simpler way to extend the library
     F.fn = F.prototype = {
         // Core functions
@@ -126,6 +127,9 @@
     // assigning the 'F' prototype to the 'init' prototype I'm sure the object
     // I return has all the methods declared for F
     F.fn.init.prototype = F.fn;
+
+    // Plugins object for extendibility
+    F.plugins = {};
 
     // Attach the constructor function to the window object
     root.F = F;

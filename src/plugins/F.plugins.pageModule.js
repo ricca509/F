@@ -16,7 +16,7 @@ F.plugins.pageModule = {
     assignDefaultProps: function(module) {
         module.el = module.el || 'body';
         module.$el = $(module.el);
-        module.$ = _.bind(module.$el.find, module.$el);        
+        module.$ = _.bind(module.$el.find, module.$el);
     },
 
     resolveSelectors: function(module) {
@@ -41,14 +41,14 @@ F.plugins.pageModule = {
                 handler = this.parseEventsHandler(module, eventsLeft);
                 events = this.parseEvents(module, eventsLeft);
                 selectors = this.parseSelectors(module, eventsLeft);
-                
+
                 this.applyBinding(module, selectors, events, handler);
             }
         }
-    },    
+    },
 
     parseEvents: function(module, key) {
-        return key.split(',').join(' ');       
+        return key.split(',').join(' ');
     },
 
     parseSelectors: function(module, key) {
@@ -57,15 +57,15 @@ F.plugins.pageModule = {
         var cached = [], external = [], internal = [];
 
         _.each(selectorsList, function(selector, idx) {
-            selector = $.trim(selector);            
-            if (selector.indexOf('this.') === 0) {                
+            selector = F.trim(selector);
+            if (selector.indexOf('this.') === 0) {
                 cached.push(module.UI['$' + _.last(selector.split('.'))]);
             } else if (selector.indexOf('@') === 0) {
                 external.push(selector.substring(1));
             } else {
                 internal.push(selector);
             }
-        });        
+        });
 
         return {
             cached: cached,
@@ -89,7 +89,7 @@ F.plugins.pageModule = {
             module.$el.on(events,
                           selectors.internal,
                           _.bind(handler, module));
-        }                    
+        }
 
         if (selectors.external.length > 0) {
             $(selectors.external).on(events, _.bind(handler, module));
@@ -109,8 +109,8 @@ F.plugins.pageModule = {
         }
         for (key in module.events) {
             if(_.has(module.events, key)){
-                if (!module.events[key] || 
-                    !_.isArray(module.events[key]) || 
+                if (!module.events[key] ||
+                    !_.isArray(module.events[key]) ||
                     module.events[key].length !== 2) {
                     throw "event object is incorrect";
                 }
