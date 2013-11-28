@@ -193,7 +193,7 @@ F.plugins.pageModule = {
     },    
 
     parseEvents: function(module, key) {
-        return key.split(',');       
+        return key.split(',').join(' ');       
     },
 
     parseSelectors: function(module, key) {
@@ -202,8 +202,7 @@ F.plugins.pageModule = {
         var cached = [], external = [], internal = [];
 
         _.each(selectorsList, function(selector, idx) {
-            selector = $.trim(selector);
-            // Cached selectors
+            selector = $.trim(selector);            
             if (selector.indexOf('this.') === 0) {                
                 cached.push(module.UI['$' + _.last(selector.split('.'))]);
             } else if (selector.indexOf('@') === 0) {
@@ -231,23 +230,21 @@ F.plugins.pageModule = {
     },
 
     applyBinding: function(module, selectors, events, handler) {
-        _.each(events, function(ev) {
-            if (selectors.internal.length > 0) {
-                module.$el.on(ev,
-                              selectors.internal,
-                              _.bind(handler, module));
-            }                    
+        if (selectors.internal.length > 0) {
+            module.$el.on(events,
+                          selectors.internal,
+                          _.bind(handler, module));
+        }                    
 
-            if (selectors.external.length > 0) {
-                $(selectors.external).on(ev, _.bind(handler, module));
-            }
+        if (selectors.external.length > 0) {
+            $(selectors.external).on(events, _.bind(handler, module));
+        }
 
-            if (selectors.cached.length > 0) {
-                _.each(selectors.cached, function(cachedSelector) {
-                    cachedSelector.on(ev, _.bind(handler, module));
-                });
-            }
-        });   
+        if (selectors.cached.length > 0) {
+            _.each(selectors.cached, function(cachedSelector) {
+                cachedSelector.on(events, _.bind(handler, module));
+            });
+        }
     },
 
     checkEventsObject: function(module) {
