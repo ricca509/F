@@ -103,6 +103,14 @@
         return;
     };
 
+    F.trimStart = function(str) {
+        return str.replace(/^\s+/, '');
+    };
+
+    F.trimEnd = function(str) {
+        return str.replace(/\s+$/, '');
+    };
+
     F.trim = function(str) {
         return str.replace(/(^\s+|\s+$)/g,'');
     };

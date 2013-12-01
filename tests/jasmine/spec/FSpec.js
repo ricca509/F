@@ -33,6 +33,14 @@ describe('The F library', function() {
         expect(F.Tests.Module1.type).toBeDefined();
     });
 
+    it('can create a namespace even for a number or a string', function() {
+        F.defineModule("F.Tests.NumberMod", 5);
+        F.defineModule("F.Tests.StringMod", 'test');
+
+        expect(F.Tests.NumberMod).toBe(5);
+        expect(F.Tests.StringMod).toBe('test');
+    })
+
     it('assign the object a "default" type', function(){
         F.defineModule("F.Tests.Module2");
         expect(F.Tests.Module2.type).toBeDefined();
@@ -86,6 +94,24 @@ describe('The F library', function() {
         expect(callbacks.onAfter).toHaveBeenCalled();
         expect(callbacks.onBefore.calls.length).toEqual(1);
         expect(callbacks.onAfter.calls.length).toEqual(1);
+    });
+
+    it('can trim string at the beginning', function() {
+        var str = '  hello';
+        expect(str.length).toBe(7);
+        expect(F.trimStart(str).length).toBe(5);
+    });
+
+    it('can trim string at the end', function() {
+        var str = 'hello  ';
+        expect(str.length).toBe(7);
+        expect(F.trimEnd(str).length).toBe(5);
+    });
+
+    it('can trim strings', function() {
+        var str = '  hello  ';
+        expect(str.length).toBe(9);
+        expect(F.trim(str).length).toBe(5);
     });
 
     // TODO: To be tested properly

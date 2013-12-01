@@ -54,12 +54,15 @@ F.plugins.pageModule = {
     parseSelectors: function(module, key) {
         var rightSide = module.events[key];
         var selectorsList = _.first(_.without(rightSide, _.last(rightSide))).split(',');
-        var cached = [], external = [], internal = [];
+        var cached = [], external = [], internal = [], tmpEl;
 
         _.each(selectorsList, function(selector, idx) {
             selector = F.trim(selector);
             if (selector.indexOf('this.') === 0) {
-                cached.push(module.UI['$' + _.last(selector.split('.'))]);
+                tmpEl = module.UI['$' + _.last(selector.split('.'))];
+                if (tmpEl && tmpEl instanceof jQuery) {
+                    cached.push(tmpEl);
+                }
             } else if (selector.indexOf('@') === 0) {
                 external.push(selector.substring(1));
             } else {

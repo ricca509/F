@@ -36,7 +36,7 @@ describe('The plugin F.plugins.pageModule', function() {
                 link: 'a[href="#"]'
             },
             events: {
-                'click, hover': ['ul#list>li.list span, this.UI.link, @#outside', 'eventHandler']
+                'click, hover': ['ul#list>li.list span, this.UI.link1, this.UI.link, @#outside', 'eventHandler']
             },
             eventHandler: handlers.eventHandler
         });
@@ -48,7 +48,7 @@ describe('The plugin F.plugins.pageModule', function() {
         expect(test).toBe(1);
 
         // Click on cached element
-        evMod.$('a[href="#"]').eq(0).trigger('click');
+        evMod.UI.$link.trigger('click');
         expect(test).toBe(2);
 
         // Click on external element
