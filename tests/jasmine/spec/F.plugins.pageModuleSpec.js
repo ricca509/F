@@ -59,4 +59,18 @@ describe('The plugin F.plugins.pageModule', function() {
         $('#outside').eq(0).trigger('hover');
         expect(test).toBe(4);
     });
+
+    it('does not update the $el if it is provided', function() {
+        var $el = $('#list');
+        F.defineModule('Tests.eventsMod.$elTest', {
+            type: 'page',
+            el: '.test'
+        });
+
+        var test = F.createInstance('Tests.eventsMod.$elTest', {
+            $el: $el
+        });
+
+        expect(test.$el).toBe($el);
+    });
 });

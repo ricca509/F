@@ -171,8 +171,17 @@ F.plugins.pageModule = {
     },
 
     assignDefaultProps: function(module) {
-        module.el = module.el || 'body';
-        module.$el = $(module.el);
+        if (module.$el) {
+            if (!module.$el instanceof jQuery) {
+                module.$el = $('body');
+            } else {
+                module.el = module.$el.length > 0 ? module.$el.selector : undefined;
+            }
+        } else {
+            module.el = module.el || 'body';
+            module.$el = $(module.el);
+        }
+
         module.$ = _.bind(module.$el.find, module.$el);
     },
 
