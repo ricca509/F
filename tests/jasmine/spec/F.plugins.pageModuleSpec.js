@@ -60,6 +60,45 @@ describe('The plugin F.plugins.pageModule', function() {
         expect(test).toBe(4);
     });
 
+    it('binds events to the window object', function() {
+        var test = 0, handlers = {
+            eventHandler: function(e) {
+                test++;
+            }
+        };
+        F.defineModule('Tests.windowTest', {
+            type: 'page',
+            events: {
+                'click': ['@window', 'eventHandler']
+            },
+            eventHandler: handlers.eventHandler
+        });
+
+        var instance = F.createInstance('Tests.windowTest');
+        $(window).trigger('click');
+        expect(test).toBe(1);
+
+    });
+
+    it('binds events to the document object', function() {
+        var test = 0, handlers = {
+            eventHandler: function(e) {
+                test++;
+            }
+        };
+        F.defineModule('Tests.documentTest', {
+            type: 'page',
+            events: {
+                'click': ['@document', 'eventHandler']
+            },
+            eventHandler: handlers.eventHandler
+        });
+
+        var instance = F.createInstance('Tests.documentTest');
+        $(document).trigger('click');
+        expect(test).toBe(1);
+    });
+
     it('does not update the $el if it is provided', function() {
         var $el = $('#list');
         F.defineModule('Tests.eventsMod.$elTest', {

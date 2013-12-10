@@ -63,7 +63,7 @@ F.plugins.pageModule = {
     parseSelectors: function(module, key) {
         var rightSide = module.events[key];
         var selectorsList = _.first(_.without(rightSide, _.last(rightSide))).split(',');
-        var cached = [], external = [], internal = [], tmpEl;
+        var cached = [], external = [], internal = [], special = [], tmpEl;
 
         _.each(selectorsList, function(selector, idx) {
             selector = F.trim(selector);
@@ -73,6 +73,12 @@ F.plugins.pageModule = {
                     cached.push(tmpEl);
                 }
             } else if (selector.indexOf('@') === 0) {
+                tmpEl = selector.substring(1);
+                if (tmpEl === 'window') {
+                    special.push(window);
+                } else if (tmpEl === 'document') {
+                    special.push(document);
+                }
                 external.push(selector.substring(1));
             } else {
                 internal.push(selector);
@@ -82,7 +88,8 @@ F.plugins.pageModule = {
         return {
             cached: cached,
             external: external.join(','),
-            internal: internal.join(',')
+            internal: internal.join(','),
+            special: special
         };
     },
 
@@ -97,17 +104,23 @@ F.plugins.pageModule = {
     },
 
     applyBinding: function(module, selectors, events, handler) {
-        if (selectors.internal.length > 0) {
+        if (_.size(selectors.internal) > 0) {
             module.$el.on(events,
                           selectors.internal,
                           _.bind(handler, module));
         }
 
-        if (selectors.external.length > 0) {
+        if (_.size(selectors.external) > 0) {
             $(selectors.external).on(events, _.bind(handler, module));
         }
 
-        if (selectors.cached.length > 0) {
+        if (_.size(selectors.special) > 0) {
+            _.each(selectors.special, function(specialSelector) {
+                $(specialSelector).on(events, _.bind(handler, module));
+            });
+        }
+
+        if (_.size(selectors.cached) > 0) {
             _.each(selectors.cached, function(cachedSelector) {
                 cachedSelector.on(events, _.bind(handler, module));
             });
