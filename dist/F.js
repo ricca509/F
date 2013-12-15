@@ -220,7 +220,11 @@ F.plugins.pageModule = {
     parseSelectors: function(module, key) {
         var rightSide = module.events[key];
         var selectorsList = _.first(_.without(rightSide, _.last(rightSide))).split(',');
-        var cached = [], external = [], internal = [], special = [], tmpEl;
+        var cached = [], external = [], internal = [], special = [], tmpEl,
+            specialSelectorsList = {
+                'document': document,
+                'window': window
+            };
 
         _.each(selectorsList, function(selector, idx) {
             selector = F.trim(selector);
@@ -231,10 +235,8 @@ F.plugins.pageModule = {
                 }
             } else if (selector.indexOf('@') === 0) {
                 tmpEl = selector.substring(1);
-                if (tmpEl === 'window') {
-                    special.push(window);
-                } else if (tmpEl === 'document') {
-                    special.push(document);
+                if (specialSelectorsList[tmpEl]) {
+                    special.push(specialSelectorsList[tmpEl]);
                 }
                 external.push(selector.substring(1));
             } else {
