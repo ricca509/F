@@ -64,7 +64,7 @@ var instance = F.createInstance(moduleToCreateInstanceFrom, extendObject, onBefo
 ```
 The core library is very small by purpose and the ability of creating plugins is provided.
 
-#### The *init* function
+#### The `init` function
 If you define a `init` function within your module, it will run as soon as you create an instance of the module via the `F.createInstance`
 
 ## The pageModule ##
@@ -116,18 +116,21 @@ On the right side, we have the name of the handler, that has to be declared insi
 **Selector type and syntax**
 - **Normal** jQuery CSS selector, **scoped** to the el element: just write the plain jQuery selector.
 ```javascript
+
 events: {
     'click ul#list>li.list span': 'handleLink'
 }
 ```
 - **Cached** element, defined in the UI object. Use the normal object sintax:
 ```javascript
+
 events: {
     'click this.UI.link1': 'handleLink'
 }
 ```
 - **External** element: access elements outside el, 'document' and window included. Prepend the `@` symbol before the CSS selector (or `@window`, `@document`)
 ```javascript
+
 events: {
     'click @#outside': 'handleLink',
     'click @document': 'handleLink',
