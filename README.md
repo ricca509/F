@@ -14,7 +14,7 @@ Just grab the uncompressed version `/dist/F.js` or the minified version `/dist/F
 Basic usage is the best way to show the library's features.
 
 Auto create a namespace from a string:
-```
+```javascript
 F.defineModule("F.Tests.Module1");
 ```
 Every object (or module) created with the F library has a `type` property. If you do not specify one, the library add `default` for you:
@@ -84,13 +84,13 @@ F.defineModule('F.Tests.testVariable', 'variableValue');
 "variableValue"
 ```
 
-Once you have created a **module**, you can create an **instance** of it, similar to the *Class > Object* relationship:
+Once you have created a **module**, you can create **instances** of it, similar to the *Class > Object* relationship:
 
 ```javascript
 var instance = F.createInstance(F.Tests.TestModule);
 ```
 
-You can create an instance of an existing module passing the string representing the namespace or the object itself
+You can create instances of an existing module passing the string representing the namespace or the object itself
 
 ```javascript
 var instance = F.createInstance('F.Tests.TestModule');
