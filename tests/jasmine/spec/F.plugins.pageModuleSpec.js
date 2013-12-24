@@ -36,7 +36,10 @@ describe('The plugin F.plugins.pageModule', function() {
                 link: 'a[href="#"]'
             },
             events: {
-                'click, hover': ['ul#list>li.list span, this.UI.link1, this.UI.link, @#outside', 'eventHandler']
+                'click ul#list>li.list span, ul#list>li.list span': 'eventHandler',
+                'click this.UI.link1, this.UI.link': 'eventHandler',
+                'click @#outside, @#outside': 'eventHandler',
+                'hover @#outside': 'eventHandler',
             },
             eventHandler: handlers.eventHandler
         });
@@ -69,7 +72,7 @@ describe('The plugin F.plugins.pageModule', function() {
         F.defineModule('Tests.windowTest', {
             type: 'page',
             events: {
-                'click': ['@window', 'eventHandler']
+                'click @window': 'eventHandler'
             },
             eventHandler: handlers.eventHandler
         });
@@ -89,7 +92,7 @@ describe('The plugin F.plugins.pageModule', function() {
         F.defineModule('Tests.documentTest', {
             type: 'page',
             events: {
-                'click': ['@document', 'eventHandler']
+                'click @document': 'eventHandler'
             },
             eventHandler: handlers.eventHandler
         });

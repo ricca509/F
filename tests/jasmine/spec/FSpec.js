@@ -10,7 +10,8 @@ F.defineModule("F.Tests.TestModule", {
         outside: '#outside'
     },
     events: {
-        'click, focus': ['ul>li.list img, this.UI.articleList, @window, #test, @#external > ul','handleLink'],
+        'click ul>li.list img, this.UI.articleList, @window, #test, @#external > ul': 'handleLink',
+        'focus ul>li.list img, this.UI.articleList, @window, #test, @#external > ul': 'handleLink'
     },
     handleLink: function (ev) {
         ev.preventDefault();

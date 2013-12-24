@@ -197,29 +197,28 @@ F.plugins.pageModule = {
     },
 
     bindEvents: function(module) {
-        // 'click, focus': ['this.UI.tipTrigger, @#external-el > ul > li','Link1'],
-        var eventsLeft, handler, events, selectors;
+        // 'click this.UI.tipTrigger, @#external-el > ul > li': Link1'
+        var key, handler, events, selectors;
         this.checkEventsObject(module);
-        for (eventsLeft in module.events) {
-            if(_.has(module.events, eventsLeft)){
+        for (key in module.events) {
+            if(_.has(module.events, key)){
+                handler = this.parseEventsHandler(module, key);
+                events = this.parseEvents(module, key);
+                selectors = this.parseSelectors(module, key);
                 // Binding the event: 'this' will be the module, not the jQuery
                 // element
-                handler = this.parseEventsHandler(module, eventsLeft);
-                events = this.parseEvents(module, eventsLeft);
-                selectors = this.parseSelectors(module, eventsLeft);
-
                 this.applyBinding(module, selectors, events, handler);
             }
         }
     },
 
     parseEvents: function(module, key) {
-        return key.split(',').join(' ');
+        return _.first(key.split(' '));
     },
 
     parseSelectors: function(module, key) {
-        var rightSide = module.events[key];
-        var selectorsList = _.first(_.without(rightSide, _.last(rightSide))).split(',');
+        var left = key.split(' ');
+        var selectorsList = _.without(left, _.first(left)).join(' ').split(',');
         var cached = [], external = [], internal = [], special = [], tmpEl,
             specialSelectorsList = {
                 'document': document,
@@ -230,17 +229,20 @@ F.plugins.pageModule = {
             selector = F.trim(selector);
             if (selector.indexOf('this.') === 0) {
                 tmpEl = module.UI['$' + _.last(selector.split('.'))];
-                if (tmpEl && tmpEl instanceof jQuery) {
+                if (tmpEl && tmpEl instanceof jQuery && !_.contains(cached, tmpEl)) {
                     cached.push(tmpEl);
                 }
             } else if (selector.indexOf('@') === 0) {
                 tmpEl = selector.substring(1);
-                if (specialSelectorsList[tmpEl]) {
+                if (specialSelectorsList[tmpEl] && !_.contains(special, specialSelectorsList[tmpEl])) {
                     special.push(specialSelectorsList[tmpEl]);
+                } else if (!_.contains(external, tmpEl)) {
+                    external.push(tmpEl);
                 }
-                external.push(selector.substring(1));
             } else {
-                internal.push(selector);
+                if (!_.contains(internal, selector)) {
+                    internal.push(selector);
+                }
             }
         });
 
@@ -253,9 +255,7 @@ F.plugins.pageModule = {
     },
 
     parseEventsHandler: function(module, key) {
-        var rightSide = module.events[key],
-            handlerName;
-        handlerName = _.last(rightSide);
+        var handlerName = module.events[key];
         if (_.isUndefined(module[handlerName]) || !_.isFunction(module[handlerName])) {
             throw "Incorrect handler for events " + key;
         }
@@ -293,9 +293,7 @@ F.plugins.pageModule = {
         }
         for (key in module.events) {
             if(_.has(module.events, key)){
-                if (!module.events[key] ||
-                    !_.isArray(module.events[key]) ||
-                    module.events[key].length !== 2) {
+                if (!module.events[key]) {
                     throw "event object is incorrect";
                 }
             }
