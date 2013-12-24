@@ -6,9 +6,10 @@ The F library is built with the purpose of working on multiple page applications
 * jQuery
 * underscore.js
 
-## Core module
-
 ### Usage
+Just grab the uncompressed version `/dist/F.js` or the minified version `/dist/F.min.js`
+
+## Core module
 
 Basic usage is the best way to show the library's features.
 
@@ -22,10 +23,10 @@ Every object (or module) created with the F library has a `type` property. If yo
 > F.Tests.Module1;
 Object {type: "default"}
 ```
-Obviously, you can pass an object to define the structure of your module:
+You can pass an **object** to define the structure of your module:
 
 ```javascript
-F.defineModule("F.Tests.UIModule", {
+F.defineModule('F.Tests.testObject', {
     defaults: {
         numArticles: 5
     },
@@ -33,15 +34,57 @@ F.defineModule("F.Tests.UIModule", {
         ev.preventDefault();
     },
     test: function() {
-        console.log("Test called");
+        console.log('Test called');
     },
     init: function() {
         this.test();
         this.a = 10;
     }
 });
+
+// In the console:
+> F.Tests.testObject
+Object {defaults: Object, handleLink: function, test: function, init: function, type: "default"}
 ```
-Once you have created a module, you can create an instance of it, similar to the Class > Object relationship:
+or a **function**:
+
+```javascript
+F.defineModule('F.Tests.testFunction', function() {
+    var a, b;
+    var c = function() {
+        // stuff
+    }
+    
+    return {
+        doSomething: c
+    };
+});
+
+// In the console:
+> F.Tests.testFunction
+function () {
+    var a, b;
+    var c = function() {
+        // stuff
+    }
+    
+    return {
+        doSomething: c
+    };
+}
+```
+
+or a **variable**:
+
+```javascript
+F.defineModule('F.Tests.testVariable', 'variableValue');
+
+// In the console:
+> F.Tests.testVariable
+"variableValue"
+```
+
+Once you have created a **module**, you can create an **instance** of it, similar to the *Class > Object* relationship:
 
 ```javascript
 var instance = F.createInstance(F.Tests.TestModule);
@@ -72,6 +115,15 @@ If you define a `init` function within your module, it will run as soon as you c
 The *core F library* is pretty much this: a simple way to create namespaces that contain variables, object or functions and create instances of them.
 
 The power of the library is the fact that, by using a generic modular system, you can define your own module type and let the library call it for you. The next section explore the modules echosystem.
+
+### Helpers functions
+The core of the library will remain small by purpose, the following functions are available:
+* `F.defineModule(namespace, module, callback)`
+* `F.createInstance(module, opts, onBeforeCreate, onAfterCreate)`
+* `F.trimStart(str)`
+* `F.trimEnd(str)`
+* `F.trim(str)`
+* `F.extend` (same as `_.extend`)
 
 ## The modules ecosystem
 

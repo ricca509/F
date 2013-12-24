@@ -1,14 +1,12 @@
 ;(function (undefined) {
     // This is the constructor function. It will be attached to the window object
     // and executed every time we call F(...). Returns a new 'instance' of the library.
-    var root, slice, resolveNamespace, initModule,
+    var root, resolveNamespace, initModule,
         F = function (args) {
             return new F.fn.init(args);
         };
 
     root = this;
-
-    slice = Array.prototype.slice;
 
     resolveNamespace = function(nsString) {
         var ns = nsString.split('.'),
@@ -114,6 +112,8 @@
     F.trim = function(str) {
         return str.replace(/(^\s+|\s+$)/g,'');
     };
+
+    F.extend = _.extend;
 
     // Create the 'fn' object which is the same as 'prototype' to enable a simpler way to extend the library
     F.fn = F.prototype = {
