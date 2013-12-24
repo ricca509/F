@@ -6,7 +6,9 @@ The F library is built with the purpose of working on multiple page applications
 * jQuery
 * underscore.js
 
-### Usage 
+## Core module
+
+### Usage
 
 Basic usage is the best way to show the library's features.
 
@@ -65,20 +67,27 @@ var instance = F.createInstance(moduleToCreateInstanceFrom, extendObject, onBefo
 The core library is very small by purpose and the ability of creating plugins is provided.
 
 #### The `init` function
-If you define a `init` function within your module, it will run as soon as you create an instance of the module via the `F.createInstance`
+If you define a `init` function within your module, it will run as soon as you create an instance of the module via the `F.createInstance`.
 
-## The pageModule ##
+The *core F library* is pretty much this: a simple way to create namespaces that contain variables, object or functions and create instances of them.
+
+The power of the library is the fact that, by using a generic modular system, you can define your own module type and let the library call it for you. The next section explore the modules echosystem.
+
+## The modules ecosystem
+
+### The *pageModule* (`type: 'page'`) ##
 
 The *pageModule* makes it easy to work with DOM related stuff. It offers:
 
 * declarative event binding
 * auto scoping to a root element
-* selectors caching.
+* selectors caching (UI declaration)
+* jQuery shortcuts
 
-Make sure to define the right `type` property when you define your module if you want to use the features of the pageModule module:
+Make sure to define the right `type` property when you define your module if you want to use the features of the *pageModule* module:
 
 ```javascript
-F.defineModule("F.Tests.PageModule", {
+F.defineModule('F.Tests.PageModule', {
     type: 'page'
 });
 ```
@@ -89,10 +98,10 @@ As in Backbone.js views, the `el` element represent the root element of the modu
 The module automatically creates a `$el` element, which is a jQuery wrapped element of the `el` element. If you declare both `$el` and `el`, the `$el` will win and `el` will be set to `$el.selector`.
 
 #### The `this.$()` function
-Every operation within the module has to be done in the scope of the `el` element. To achieve this, you can use the `this.$()` function. This is the same as using `$el.find()`.
+Every operation within the module has to be done in the scope of the `el` element. To achieve this, you can use the `this.$()` function. This is the same as using `this.$el.find()` or `$(el).find()`.
 
 #### The `UI` object
-If you want to have a 'shortcut' to often used elements and want the module to cache them for you, you have to use the `UI` element. It is straightforward:
+If you want to have a 'shortcut' to often used elements and want the module to cache them for you, you have to use the `UI` object. It is pretty straightforward:
 
 ```javascript
 UI: {
@@ -101,7 +110,7 @@ UI: {
     outside: '#outside'
 }
 ```
-Shortcut name on the right, jQuery selector on the left. You'll be able to access the elements with `this.UI.name`
+The key is the hortcut name, the value is the jQuery CSS selector. You'll be able to access the elements with `this.UI.name`
 
 #### The `events` object
 The declarative event binding is achieved by using the `events` object:
@@ -111,11 +120,11 @@ events: {
     'click ul#list>li.list span': 'handleLink'
 }
 ```
-The first name is always the event name (`click` in this case). 
-The remaining words in the string represent the selector list.
-On the right side, we have the name of the handler, that has to be declared inside the module.
+The first word is always the event name (`click`, in this case). 
+The remaining words in the string that represents the selector list.
+On the right side, we have the name of the handler function, that has to be declared inside the module.
 
-**Selector type and syntax**
+**Selectors type and syntax**
 - **Normal** jQuery CSS selector, **scoped** to the el element: just write the plain jQuery selector.
 
 ```javascript
@@ -140,10 +149,10 @@ events: {
 ```
 
 ### Complete example
-The complete list of the properties follows:
+The complete list of properties for the *pageModule* follows:
 
 ```javascript
-F.defineModule("F.Tests.PageModule1", {
+F.defineModule('F.Tests.PageModule1', {
     // Always define the type property correctly
     type: 'page',
     // Define the root element of your module.
@@ -169,7 +178,7 @@ F.defineModule("F.Tests.PageModule1", {
         ev.preventDefault();
     },
     test: function() {
-        console.log("Test called");
+        console.log('Test called');
     },
     // The init function, if present, is automatically called by the
     // createInstance function for you. Write here the code that you want to 
@@ -178,3 +187,39 @@ F.defineModule("F.Tests.PageModule1", {
     }
 });
 ```
+
+## Writing a module
+Defining a new module is easy and make it possible to extend the *F core*, which is small by intention.
+
+### Pick up a name
+
+The first step is to pick up a name for the module. Let's assume we want to create the `fooModule`. When defining a module of this type, we will have to define the `type` property to be `foo`:
+
+```javascript
+F.defineModule('F.Tests.PageModule1', {
+    // Always define the type property correctly
+    type: 'foo',
+    ...
+}
+```
+The *F core* library, reading the `type` property of the module, will find `test` and search under `F.plugins` an object called `fooModule` (`F.plugins.fooModule`)
+
+### Define the `initModule` function
+
+The `F.plugins.fooModule` will have to expose the `initModule` function. It will be passed an instance of the object, and will have to return it (after having modified it).
+
+An example of an `initModule` function is as follows:
+
+```javascript
+F.plugins.fooModule = {
+    initModule: function (module) {
+        return module;
+    }
+};
+```
+
+You can find an example under ` /src/plugins/F.plugins.defaultModule.js`
+
+### That's it!
+
+
