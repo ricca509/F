@@ -93,6 +93,7 @@ Every operation within the module has to be done in the scope of the `el` elemen
 
 #### The `UI` object
 If you want to have a 'shortcut' to often used elements and want the module to cache them for you, you have to use the `UI` element. It is straightforward:
+
 ```javascript
 UI: {
     articleList: '#article-list',
@@ -104,6 +105,7 @@ Shortcut name on the right, jQuery selector on the left. You'll be able to acces
 
 #### The `events` object
 The declarative event binding is achieved by using the `events` object:
+
 ```javascript
 events: {
     'click ul#list>li.list span': 'handleLink'
@@ -115,22 +117,22 @@ On the right side, we have the name of the handler, that has to be declared insi
 
 **Selector type and syntax**
 - **Normal** jQuery CSS selector, **scoped** to the el element: just write the plain jQuery selector.
-```javascript
 
+```javascript
 events: {
     'click ul#list>li.list span': 'handleLink'
 }
 ```
 - **Cached** element, defined in the UI object. Use the normal object sintax:
-```javascript
 
+```javascript
 events: {
     'click this.UI.link1': 'handleLink'
 }
 ```
 - **External** element: access elements outside el, 'document' and window included. Prepend the `@` symbol before the CSS selector (or `@window`, `@document`)
-```javascript
 
+```javascript
 events: {
     'click @#outside': 'handleLink',
     'click @document': 'handleLink',
