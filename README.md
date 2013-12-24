@@ -84,13 +84,13 @@ F.defineModule('F.Tests.testVariable', 'variableValue');
 "variableValue"
 ```
 
-Once you have created a **module**, you can create an **instance** of it, similar to the *Class > Object* relationship:
+Once you have created a **module**, you can create **instances** of it, similar to the *Class > Object* relationship:
 
 ```javascript
 var instance = F.createInstance(F.Tests.TestModule);
 ```
 
-You can create an instance of an existing module passing the string representing the namespace or the object itself
+You can create instances of an existing module passing the string representing the namespace or the object itself
 
 ```javascript
 var instance = F.createInstance('F.Tests.TestModule');
