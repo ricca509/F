@@ -6,11 +6,13 @@ module.exports = function(grunt) {
             all: ['Gruntfile.js', 'src/**/*.js', 'tests/*.js']
         },
         jasmine: {
-            pivotal: {
-                src: 'F.js',
-                options: {
-                    specs: 'tests/jasmine/spec/*Spec.js'
-                }
+            src: 'dist/F.js',
+            options: {
+                specs: 'tests/jasmine/spec/*Spec.js',
+                vendor: [
+                    'libs/jquery/jquery.min.js',
+                    'libs/underscore/underscore-min.js'
+                ]
             }
         },
         concat: {
@@ -49,6 +51,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-jasmine');
     grunt.loadNpmTasks('grunt-strip');
 
     grunt.registerTask('default', ['jshint']);

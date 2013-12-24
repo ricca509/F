@@ -1,4 +1,4 @@
-## F library: namespace, structure and speed up your javascript
+## F: a library to namespace, structure and speed up your javascript code
 
 The F library is built with the purpose of working on multiple page applications easier and faster, giving a structure to the code and allowing the developer to write structured and namespaced code in no time.
 
@@ -13,9 +13,21 @@ Just grab the uncompressed version `/dist/F.js` or the minified version `/dist/F
 
 Basic usage is the best way to show the library's features.
 
-Auto create a namespace from a string:
+### Include it in your page
+
+In your HTML page, include the dependencies and the library:
+
+```html
+<script type="text/javascript" src="/libs/jquery.min.js"></script>
+<script type="text/javascript" src="/libs/underscore-min.js"></script>
+<script type="text/javascript" src="/libs/F.min.js"></script>
+```
+
+### Create namespaced objects (`F.defineModule`)
+
+**Create a namespace** from a string:
 ```javascript
-F.defineModule("F.Tests.Module1");
+F.defineModule('F.Tests.Module1');
 ```
 Every object (or module) created with the F library has a `type` property. If you do not specify one, the library add `default` for you:
 
@@ -83,6 +95,7 @@ F.defineModule('F.Tests.testVariable', 'variableValue');
 > F.Tests.testVariable
 "variableValue"
 ```
+### Create instances of your objects (`F.createInstance`)
 
 Once you have created a **module**, you can create **instances** of it, similar to the *Class > Object* relationship:
 
@@ -95,29 +108,28 @@ You can create instances of an existing module passing the string representing t
 ```javascript
 var instance = F.createInstance('F.Tests.TestModule');
 ```
-You can extend the standard instance of a module with additional configuration. Your configuration will be applied to your instance, without modifying the default definition of the module:
+You can **extend the standard instance** of a module with additional configuration. Your configuration will be applied to your instance, without modifying the default definition of the module:
 
 ```javascript
 var instance = F.createInstance(F.Tests.UIModule, {
     el: 'body'
 });
 ```
-Every time you create an instance of a module, the F library calls before and after callbacks if provided. The complete call for the 'createInstance' function is the following:
+Every time you create an instance of a module, the F library calls `onBefore` and `onAfter` callbacks if provided. The complete call for the `createInstance` function is the following:
 
 ```javascript
 var instance = F.createInstance(moduleToCreateInstanceFrom, extendObject, onBefore, onAfter);
 ```
-The core library is very small by purpose and the ability of creating plugins is provided.
 
 #### The `init` function
-If you define a `init` function within your module, it will run as soon as you create an instance of the module via the `F.createInstance`.
+If you define a `init` function within your module, it **will run as soon as you create an instance** of the module via the `F.createInstance`.
 
-The *core F library* is pretty much this: a simple way to create namespaces that contain variables, object or functions and create instances of them.
+The *core F library* is pretty much this: a simple way to create namespaces that contain variables, object or functions and create instances of them. This helps maintaining a **structured, globals-free code**.
 
 The power of the library is the fact that, by using a generic modular system, you can define your own module type and let the library call it for you. The next section explore the modules echosystem.
 
 ### Helpers functions
-The core of the library will remain small by purpose, the following functions are available:
+While the core of the library will remain small by purpose, the following functions are available:
 * `F.defineModule(namespace, module, callback)`
 * `F.createInstance(module, opts, onBeforeCreate, onAfterCreate)`
 * `F.trimStart(str)`
@@ -127,16 +139,16 @@ The core of the library will remain small by purpose, the following functions ar
 
 ## The modules ecosystem
 
-### The *pageModule* (`type: 'page'`) ##
+### The *page* module (`type: 'page'`)
 
-The *pageModule* makes it easy to work with DOM related stuff. It offers:
+The *page* module makes it easy to work with DOM related stuff. It offers:
 
 * declarative event binding
 * auto scoping to a root element
 * selectors caching (UI declaration)
 * jQuery shortcuts
 
-Make sure to define the right `type` property when you define your module if you want to use the features of the *pageModule* module:
+Make sure to define the right `type` property when you define your module if you want to use the features of the *page* module:
 
 ```javascript
 F.defineModule('F.Tests.PageModule', {
@@ -173,7 +185,7 @@ events: {
 }
 ```
 The first word is always the event name (`click`, in this case). 
-The remaining words in the string that represents the selector list.
+The remaining words in the string represent the selector list.
 On the right side, we have the name of the handler function, that has to be declared inside the module.
 
 **Selectors type and syntax**
@@ -184,14 +196,14 @@ events: {
     'click ul#list>li.list span': 'handleLink'
 }
 ```
-- **Cached** element, defined in the UI object. Use the normal object sintax:
+- **Cached** element, defined in the UI object: use the normal object sintax.
 
 ```javascript
 events: {
     'click this.UI.link1': 'handleLink'
 }
 ```
-- **External** element: access elements outside el, 'document' and window included. Prepend the `@` symbol before the CSS selector (or `@window`, `@document`)
+- **External** element, access elements outside el, 'document' and window included: prepend the `@` symbol before the CSS selector (or `@window`, `@document`)
 
 ```javascript
 events: {
@@ -248,19 +260,18 @@ Defining a new module is easy and make it possible to extend the *F core*, which
 The first step is to pick up a name for the module. Let's assume we want to create the `fooModule`. When defining a module of this type, we will have to define the `type` property to be `foo`:
 
 ```javascript
-F.defineModule('F.Tests.PageModule1', {
-    // Always define the type property correctly
+F.defineModule('F.Tests.fooModule1', {
     type: 'foo',
     ...
 }
 ```
-The *F core* library, reading the `type` property of the module, will find `test` and search under `F.plugins` an object called `fooModule` (`F.plugins.fooModule`)
+The *F core* library, reading the `type` property of the module (`test`), will search under `F.plugins` an object called `fooModule` (`F.plugins.fooModule`).
 
 ### Define the `initModule` function
 
 The `F.plugins.fooModule` will have to expose the `initModule` function. It will be passed an instance of the object, and will have to return it (after having modified it).
 
-An example of an `initModule` function is as follows:
+An example of an `initModule` defined for our `F.plugins.fooModule` function is as follows:
 
 ```javascript
 F.plugins.fooModule = {
@@ -271,6 +282,18 @@ F.plugins.fooModule = {
 ```
 
 You can find an example under ` /src/plugins/F.plugins.defaultModule.js`
+
+### Create a plugin file for the module and include it in your page
+The best place for the `F.plugins.fooModule` is in a file named `F.plugins.fooModule.js`. 
+
+Be sure to include it after the main F include.
+
+```html
+<script type="text/javascript" src="/libs/jquery.min.js"></script>
+<script type="text/javascript" src="/libs/underscore-min.js"></script>
+<script type="text/javascript" src="/libs/F.min.js"></script>
+<script type="text/javascript" src="/libs/F.plugins.fooModule.js"></script>
+```
 
 ### That's it!
 
