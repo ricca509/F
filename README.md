@@ -1,5 +1,7 @@
 ## F: a library to namespace, structure and speed up your javascript code
 
+[![Build Status](https://travis-ci.org/ricca509/F.png?branch=master)](https://travis-ci.org/ricca509/F)
+
 The F library is built with the purpose of working on multiple page applications easier and faster, giving a structure to the code and allowing the developer to write structured and namespaced code in no time.
 
 ### Dependencies
