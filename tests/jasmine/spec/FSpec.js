@@ -1,5 +1,4 @@
 F.defineModule("F.Tests.TestModule", {
-    type: 'page',
     defaults: {
         numArticles: 5
     },
@@ -8,10 +7,6 @@ F.defineModule("F.Tests.TestModule", {
         articleList: '#article-list',
         moreButton: '#more-button',
         outside: '#outside'
-    },
-    events: {
-        'click ul>li.list img, this.UI.articleList, @window, #test, @#external > ul': 'handleLink',
-        'focus ul>li.list img, this.UI.articleList, @window, #test, @#external > ul': 'handleLink'
     },
     handleLink: function (ev) {
         ev.preventDefault();
