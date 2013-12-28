@@ -26,8 +26,13 @@ In your HTML page, include the dependencies and the library:
 ```
 
 ### Create namespaced objects (`F.defineModule`)
+**Method signature:**
+```javascript
+F.defineModule(namespaceToCreate, object, afterDefinedCallback);
+```
 
 **Create a namespace** from a string:
+
 ```javascript
 F.defineModule('F.Tests.Module1');
 ```
@@ -97,10 +102,54 @@ F.defineModule('F.Tests.testVariable', 'variableValue');
 > F.Tests.testVariable
 "variableValue"
 ```
+### Extend your modules (`F.extendModule`)
+You can extend your modules (only object modules at the moment). This allows you to create reusable modules and make you code simpler, easier to test and debug.
+
+**Method signature:**
+```javascript
+F.extendModule(moduleToExtend, moduleThatExtends, extendedModuleNamespace, afterExtendedCallback)
+```
+
+**Extend a plain object with another one:**
+```javascript
+// Create a new module "F.newExtendedModule"
+// from two plain objects
+F.extendModule({
+        a: '1',
+        b: '2'
+    }, {
+        c: '3',
+        d: '4'
+}, 'F.newExtendedModule');
+```
+**Extend an module with an object**
+```javascript
+// Define an object module
+F.defineModule('F.objA', {
+    one: 'string',
+    two: function() {
+        return 'function two'
+    }
+});
+
+// Create a new module "F.newExtendedModule"
+// from a plain object and "F.objA"
+F.extendModule({
+    three: 5,
+    four: true
+}, 'F.objA', 'F.newExtendedModule');
+```
+
 ### Create instances of your objects (`F.createInstance`)
 
 Once you have created a **module**, you can create **instances** of it, similar to the *Class > Object* relationship:
 
+**Method signature:**
+```javascript
+F.createInstance(module, opts, onBeforeCreate, onAfterCreate)
+```
+
+Example:
 ```javascript
 var instance = F.createInstance(F.Tests.TestModule);
 ```
@@ -132,7 +181,8 @@ The power of the library is the fact that, by using a generic modular system, yo
 
 ### Helpers functions
 While the core of the library will remain small by purpose, the following functions are available:
-* `F.defineModule(namespace, module, callback)`
+* `F.defineModule(namespaceToCreate, object, afterDefinedCallback);`
+* `F.extendModule(moduleToExtend, moduleThatExtends, extendedModuleNamespace, afterExtendedCallback)`
 * `F.createInstance(module, opts, onBeforeCreate, onAfterCreate)`
 * `F.trimStart(str)`
 * `F.trimEnd(str)`
@@ -298,5 +348,3 @@ Be sure to include it after the main F include.
 ```
 
 ### That's it!
-
-

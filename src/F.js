@@ -8,12 +8,20 @@
 
     root = this;
 
-    resolveNamespace = function(nsString) {
-        var ns = nsString.split('.'),
-            obj = window;
+    resolveNamespace = function(module) {
+        var ns, obj = window;
 
-        for (var i = 0, len = ns.length; i < len; ++i) {
-            obj = obj[ns[i]];
+        if (_.isObject(module)) {
+            obj = module;
+        } else {
+            if (_.isString(module)) {
+                ns = module.split('.');
+                for (var i = 0, len = ns.length; i < len; ++i) {
+                    obj = obj[ns[i]];
+                }
+            } else {
+                throw 'You must pass an object or a namespace string';
+            }
         }
 
         return obj;
@@ -38,7 +46,7 @@
     };
 
     // Defines an object in the given namespace
-    F.defineModule = function (namespaces, module, callback) {
+    F.defineModule = function (namespaces, module, afterDefined) {
         var i, l, baseObj;
 
         baseObj = root;
@@ -59,22 +67,35 @@
             baseObj = baseObj[namespaces[i]];
         }
 
-        if (!_.isUndefined(callback) && _.isFunction(callback)) {
+        if (!_.isUndefined(afterDefined) && _.isFunction(afterDefined)) {
             // TODO: check this to invoke the callback with apply and pass the
             // right context (this)
-            callback(module);
+            afterDefined(module);
+        }
+    };
+
+    F.extendModule = function(moduleA, moduleB, extendedNamespace, afterExtended) {
+        // An object or string shall be passed.
+        var extendedModule;
+        moduleA = resolveNamespace(moduleA);
+        moduleB = resolveNamespace(moduleB);
+
+        if (moduleA.type && moduleB.type && moduleA.type !== moduleB.type) {
+            throw 'Extend object with the same "type" property';
+        }
+
+        if (_.isObject(moduleA) && _.isObject(moduleB)) {
+            extendedModule = _.extend(moduleA, moduleB);
+            F.defineModule(extendedNamespace, extendedModule, afterExtended);
+        } else {
+            throw 'F can only extend plain objects';
         }
     };
 
     F.createInstance = function(module, opts, onBeforeCreate, onAfterCreate) {
         // An object or string shall be passed.
-        if (!_.isObject(module)) {
-            if (_.isString(module)) {
-                module = resolveNamespace(module);
-            } else {
-                return;
-            }
-        }
+        module = resolveNamespace(module);
+
         var newMod = _.extend({}, module, opts),
             handlerName = newMod.type + 'Module',
             moduleHandler = F.plugins[handlerName],
@@ -95,12 +116,12 @@
 
             return decoratedModule;
         } else {
-            console.log('No handler found for ' + handlerName + ' module');
+            throw 'No handler found for ' + handlerName + ' module';
         }
-
-        return;
     };
 
+    // String helpers
+    // TODO: To be moved to a namespace under 'F' or in a plugin file
     F.trimStart = function(str) {
         return str.replace(/^\s+/, '');
     };
@@ -112,8 +133,6 @@
     F.trim = function(str) {
         return str.replace(/(^\s+|\s+$)/g,'');
     };
-
-    F.extend = _.extend;
 
     // Create the 'fn' object which is the same as 'prototype' to enable a simpler way to extend the library
     F.fn = F.prototype = {

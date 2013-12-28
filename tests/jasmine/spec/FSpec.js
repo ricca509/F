@@ -110,6 +110,48 @@ describe('The F library', function() {
         expect(F.trim(str).length).toBe(5);
     });
 
+    it('can extend an object with another one', function() {
+        expect(_.isFunction(F.extendModule)).toBe(true);
+
+        F.extendModule({
+            a: '1',
+            b: '2'
+        }, {
+            c: '3',
+            d: '4'
+        }, 'F.extended.objC');
+
+        expect(F.extended.objC).toBeDefined();
+        expect(F.extended.objC.a).toBe('1');
+        expect(F.extended.objC.b).toBe('2');
+        expect(F.extended.objC.c).toBe('3');
+        expect(F.extended.objC.d).toBe('4');
+        expect(F.extended.objC.type).toBe('default');
+
+    });
+
+    it('can extend an module with an object', function() {
+        expect(_.isFunction(F.extendModule)).toBe(true);
+
+        F.defineModule('F.extended.objA', {
+            one: 'string',
+            two: function() {
+                return 'function two'
+            }
+        });
+
+        F.extendModule({
+            three: 5,
+            four: true
+        }, 'F.extended.objA', 'F.extended.objB');
+
+        expect(F.extended.objB).toBeDefined();
+        expect(F.extended.objB.one).toBe('string');
+        expect(_.isFunction(F.extended.objB.two)).toBe(true);
+        expect(F.extended.objB.three).toBe(5);
+        expect(F.extended.objB.four).toBe(true);
+    });
+
     // TODO: To be tested properly
     // it('can be register under any other name', function() {
     //     F.init("App");
