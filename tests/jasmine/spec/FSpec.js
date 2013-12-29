@@ -43,6 +43,25 @@ describe('The F library', function() {
         expect(F.Tests.Module2.type).toBe('default');
     });
 
+    it('calls the "afterDefined" callback when defining a module', function() {
+        var callbacks = {
+            onAfterDefined: function(module) {
+                console.log('defined');
+                console.log(module);
+            }
+        };
+
+        spyOn(callbacks, "onAfterDefined");
+
+        F.defineModule("F.Tests.Module3", {
+            a: 2,
+            b: 3
+        }, callbacks.onAfterDefined);
+
+        expect(callbacks.onAfterDefined).toHaveBeenCalled();
+        expect(callbacks.onAfterDefined.calls.length).toEqual(1);
+    });
+
     it('can create an instance of an existing module ' +
        '(created with "F.defineModule") with the "F.createInstance" method', function() {
         expect(F.Tests.TestModule).toBeDefined();
@@ -111,6 +130,14 @@ describe('The F library', function() {
     });
 
     it('can extend an object with another one', function() {
+        var callbacks = {
+            onAfterExtended: function(module) {
+                console.log('defined');
+                console.log(module);
+            }
+        };
+
+        spyOn(callbacks, "onAfterExtended");
         expect(_.isFunction(F.extendModule)).toBe(true);
 
         F.extendModule({
@@ -119,7 +146,7 @@ describe('The F library', function() {
         }, {
             c: '3',
             d: '4'
-        }, 'F.extended.objC');
+        }, 'F.extended.objC', callbacks.onAfterExtended);
 
         expect(F.extended.objC).toBeDefined();
         expect(F.extended.objC.a).toBe('1');
@@ -127,10 +154,20 @@ describe('The F library', function() {
         expect(F.extended.objC.c).toBe('3');
         expect(F.extended.objC.d).toBe('4');
         expect(F.extended.objC.type).toBe('default');
+        expect(callbacks.onAfterExtended).toHaveBeenCalled();
+        expect(callbacks.onAfterExtended.calls.length).toEqual(1);
 
     });
 
     it('can extend an module with an object', function() {
+        var callbacks = {
+            onAfterExtended: function(module) {
+                console.log('defined');
+                console.log(module);
+            }
+        };
+
+        spyOn(callbacks, "onAfterExtended");
         expect(_.isFunction(F.extendModule)).toBe(true);
 
         F.defineModule('F.extended.objA', {
@@ -143,13 +180,16 @@ describe('The F library', function() {
         F.extendModule({
             three: 5,
             four: true
-        }, 'F.extended.objA', 'F.extended.objB');
+        }, 'F.extended.objA', 'F.extended.objB', callbacks.onAfterExtended);
 
         expect(F.extended.objB).toBeDefined();
         expect(F.extended.objB.one).toBe('string');
         expect(_.isFunction(F.extended.objB.two)).toBe(true);
         expect(F.extended.objB.three).toBe(5);
         expect(F.extended.objB.four).toBe(true);
+        expect(callbacks.onAfterExtended).toHaveBeenCalled();
+        expect(callbacks.onAfterExtended.calls.length).toEqual(1);
+
     });
 
     // TODO: To be tested properly
