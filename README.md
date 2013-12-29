@@ -5,8 +5,8 @@
 The F library is built with the purpose of working on multiple page applications easier and faster, giving a structure to the code and allowing the developer to write structured and namespaced code in no time.
 
 ### Dependencies
-* jQuery
 * underscore.js
+* jQuery (only if you usa the *Page* module)
 
 ### Usage
 Just grab the uncompressed version `/dist/F.js` or the minified version `/dist/F.min.js`
@@ -123,7 +123,7 @@ F.extendModule({
         d: '4'
 }, 'F.newExtendedModule');
 ```
-**Extend an module with an object**
+**Extend an module with an object:**
 ```javascript
 // Define an object module "F.objA"
 F.defineModule('F.objA', {
@@ -188,7 +188,6 @@ While the core of the library will remain small by purpose, the following functi
 * `F.trimStart(str)`
 * `F.trimEnd(str)`
 * `F.trim(str)`
-* `F.extend` (same as `_.extend`)
 
 ## The modules ecosystem
 
