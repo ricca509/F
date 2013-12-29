@@ -113,7 +113,8 @@ F.extendModule(moduleToExtend, moduleThatExtends, extendedModuleNamespace, after
 **Extend a plain object with another one:**
 ```javascript
 // Create a new module "F.newExtendedModule"
-// from two plain objects
+// from two plain objects 
+// (the extended object will have the "type" property set to "default")
 F.extendModule({
         a: '1',
         b: '2'
@@ -124,7 +125,7 @@ F.extendModule({
 ```
 **Extend an module with an object**
 ```javascript
-// Define an object module
+// Define an object module "F.objA"
 F.defineModule('F.objA', {
     one: 'string',
     two: function() {
@@ -133,11 +134,11 @@ F.defineModule('F.objA', {
 });
 
 // Create a new module "F.newExtendedModule"
-// from a plain object and "F.objA"
-F.extendModule({
+// extending "F.objA" with a plain object
+F.extendModule('F.objA', {
     three: 5,
     four: true
-}, 'F.objA', 'F.newExtendedModule');
+}, 'F.newExtendedModule');
 ```
 
 ### Create instances of your objects (`F.createInstance`)
