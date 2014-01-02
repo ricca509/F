@@ -6,9 +6,9 @@
     var initModule = function(module) {
         _module = module;
 
-        assignDefaultProps(_module);
-        resolveSelectors(_module);
-        bindEvents(_module);
+        assignDefaultProps();
+        resolveSelectors();
+        bindEvents();
 
         if(!_.isUndefined(_module.init) && _.isFunction(_module.init)) {
             _module.init.call(_module);
@@ -17,7 +17,7 @@
         return _module;
     };
 
-    var assignDefaultProps = function(_module) {
+    var assignDefaultProps = function() {
         if (_module.$el) {
             if (!_module.$el instanceof jQuery) {
                 _module.$el = $('body');
@@ -32,7 +32,7 @@
         _module.$ = _.bind(_module.$el.find, _module.$el);
     };
 
-    var resolveSelectors = function(_module) {
+    var resolveSelectors = function() {
         var key,
             newSelectors = {};
         for (key in _module.UI) {
@@ -43,27 +43,27 @@
         _.extend(_module.UI, newSelectors);
     };
 
-    var bindEvents = function(_module) {
+    var bindEvents = function() {
         // 'click this.UI.tipTrigger, @#external-el > ul > li': Link1'
         var key, handler, events, selectors;
-        checkEventsObject(_module);
+        checkEventsObject();
         for (key in _module.events) {
             if(_.has(_module.events, key)){
-                handler = parseEventsHandler(_module, key);
-                events = parseEvents(_module, key);
-                selectors = parseSelectors(_module, key);
+                handler = parseEventsHandler(key);
+                events = parseEvents(key);
+                selectors = parseSelectors(key);
                 // Binding the event: 'this' will be the _module, not the jQuery
                 // element
-                applyBinding(_module, selectors, events, handler);
+                applyBinding(selectors, events, handler);
             }
         }
     };
 
-    var parseEvents = function(_module, key) {
+    var parseEvents = function(key) {
         return _.first(key.split(' '));
     };
 
-    var parseSelectors = function(_module, key) {
+    var parseSelectors = function(key) {
         var left = key.split(' ');
         var selectorsList = _.without(left, _.first(left)).join(' ').split(',');
         var cached = [], external = [], internal = [], special = [], tmpEl,
@@ -101,7 +101,7 @@
         };
     };
 
-    var parseEventsHandler = function(_module, key) {
+    var parseEventsHandler = function(key) {
         var handlerName = _module.events[key];
         if (_.isUndefined(_module[handlerName]) || !_.isFunction(_module[handlerName])) {
             throw "Incorrect handler for events " + key;
@@ -109,7 +109,7 @@
         return _module[handlerName];
     };
 
-    var applyBinding = function(_module, selectors, events, handler) {
+    var applyBinding = function(selectors, events, handler) {
         if (_.size(selectors.internal) > 0) {
             _module.$el.on(events,
                 selectors.internal,
@@ -133,7 +133,7 @@
         }
     };
 
-    var checkEventsObject = function(_module) {
+    var checkEventsObject = function() {
         var key;
         if (!_module.events) {
             return;
