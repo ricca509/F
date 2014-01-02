@@ -1,4 +1,5 @@
 ;(function (undefined) {
+    'use strict';
     // This is the constructor function. It will be attached to the window object
     // and executed every time we call F(...). Returns a new 'instance' of the library.
     var root, resolveNamespace, initModule,
@@ -120,20 +121,6 @@
         }
     };
 
-    // String helpers
-    // TODO: To be moved to a namespace under 'F' or in a plugin file
-    F.trimStart = function(str) {
-        return str.replace(/^\s+/, '');
-    };
-
-    F.trimEnd = function(str) {
-        return str.replace(/\s+$/, '');
-    };
-
-    F.trim = function(str) {
-        return str.replace(/(^\s+|\s+$)/g,'');
-    };
-
     // Create the 'fn' object which is the same as 'prototype' to enable a simpler way to extend the library
     F.fn = F.prototype = {
         // Core functions
@@ -165,77 +152,155 @@
 
 
 
+(function(F) {
+    'use strict';
+    // Callbacks bucket
+    var calls = {};
+
+    var trigger = function(topic, args) {
+        var i, callback;
+        if(!calls[topic]) {
+            return;
+        }
+
+        for (i = 0; i < calls[topic].length; i++) {
+            callback = calls[topic][i];
+            if (typeof(callback) === 'function') {
+                callback.call(null, args);
+            }
+        }
+    };
+
+    var on = function(topic, callback) {
+        if(topic.trim().length === 0) {
+            return false;
+        }
+        if(!calls[topic]) {
+            calls[topic] = [];
+        }
+        return calls[topic].push(callback);
+    };
+
+    var off = function(topic, index) {
+        index = index - 1;
+        if (!calls[topic] || !calls[topic][index]) {
+            return false;
+        }
+        calls[topic].splice(index, 1);
+        return true;
+    };
+
+    F.evt = {
+        on: on,
+        off: off,
+        trigger: trigger
+    };
+})(F);
+
+(function(F) {
+    'use strict';
+    // String helpers
+    var trimStart = function(str) {
+        return str.replace(/^\s+/, '');
+    };
+
+    var trimEnd = function(str) {
+        return str.replace(/\s+$/, '');
+    };
+
+    var trim = function(str) {
+        return str.replace(/(^\s+|\s+$)/g,'');
+    };
+
+    F.str = {
+        trimStart: trimStart,
+        trimEnd: trimEnd,
+        trim: trim
+    };
+}(F));
 // Module handlers
 // The method that has to be present is the initModule, called by the core F lib
 
 // Default Module
-F.plugins.defaultModule = {
-    initModule: function (module) {
-        return module;
-    }
-};
+(function(F) {
+    'use strict';
+    var _module;
+
+    var initModule = function (module) {
+        _module = module;
+        return _module;
+    };
+
+    F.plugins.defaultModule = {
+        initModule: initModule
+    };
+}(F));
 // Page Module
-F.plugins.pageModule = {
-    initModule: function (module) {
+(function(F) {
+    'use strict';
+    var _module;
 
-        this.assignDefaultProps(module);
-        this.resolveSelectors(module);
-        this.bindEvents(module);
+    var initModule = function(module) {
+        _module = module;
 
-        if(!_.isUndefined(module.init) && _.isFunction(module.init)) {
-            module.init.call(module);
+        assignDefaultProps(_module);
+        resolveSelectors(_module);
+        bindEvents(_module);
+
+        if(!_.isUndefined(_module.init) && _.isFunction(_module.init)) {
+            _module.init.call(_module);
         }
 
-        return module;
-    },
+        return _module;
+    };
 
-    assignDefaultProps: function(module) {
-        if (module.$el) {
-            if (!module.$el instanceof jQuery) {
-                module.$el = $('body');
+    var assignDefaultProps = function(_module) {
+        if (_module.$el) {
+            if (!_module.$el instanceof jQuery) {
+                _module.$el = $('body');
             } else {
-                module.el = module.$el.length > 0 ? module.$el.selector : undefined;
+                _module.el = _module.$el.length > 0 ? _module.$el.selector : undefined;
             }
         } else {
-            module.el = module.el || 'body';
-            module.$el = $(module.el);
+            _module.el = _module.el || 'body';
+            _module.$el = $(_module.el);
         }
 
-        module.$ = _.bind(module.$el.find, module.$el);
-    },
+        _module.$ = _.bind(_module.$el.find, _module.$el);
+    };
 
-    resolveSelectors: function(module) {
+    var resolveSelectors = function(_module) {
         var key,
             newSelectors = {};
-        for (key in module.UI) {
-            if(_.has(module.UI, key)){
-                newSelectors['$' + key] = module.$(module.UI[key]);
+        for (key in _module.UI) {
+            if(_.has(_module.UI, key)){
+                newSelectors['$' + key] = _module.$(_module.UI[key]);
             }
         }
-        _.extend(module.UI, newSelectors);
-    },
+        _.extend(_module.UI, newSelectors);
+    };
 
-    bindEvents: function(module) {
+    var bindEvents = function(_module) {
         // 'click this.UI.tipTrigger, @#external-el > ul > li': Link1'
         var key, handler, events, selectors;
-        this.checkEventsObject(module);
-        for (key in module.events) {
-            if(_.has(module.events, key)){
-                handler = this.parseEventsHandler(module, key);
-                events = this.parseEvents(module, key);
-                selectors = this.parseSelectors(module, key);
-                // Binding the event: 'this' will be the module, not the jQuery
+        checkEventsObject(_module);
+        for (key in _module.events) {
+            if(_.has(_module.events, key)){
+                handler = parseEventsHandler(_module, key);
+                events = parseEvents(_module, key);
+                selectors = parseSelectors(_module, key);
+                // Binding the event: 'this' will be the _module, not the jQuery
                 // element
-                this.applyBinding(module, selectors, events, handler);
+                applyBinding(_module, selectors, events, handler);
             }
         }
-    },
+    };
 
-    parseEvents: function(module, key) {
+    var parseEvents = function(_module, key) {
         return _.first(key.split(' '));
-    },
+    };
 
-    parseSelectors: function(module, key) {
+    var parseSelectors = function(_module, key) {
         var left = key.split(' ');
         var selectorsList = _.without(left, _.first(left)).join(' ').split(',');
         var cached = [], external = [], internal = [], special = [], tmpEl,
@@ -245,9 +310,9 @@ F.plugins.pageModule = {
             };
 
         _.each(selectorsList, function(selector, idx) {
-            selector = F.trim(selector);
+            selector = F.str.trim(selector);
             if (selector.indexOf('this.') === 0) {
-                tmpEl = module.UI['$' + _.last(selector.split('.'))];
+                tmpEl = _module.UI['$' + _.last(selector.split('.'))];
                 if (tmpEl && tmpEl instanceof jQuery && !_.contains(cached, tmpEl)) {
                     cached.push(tmpEl);
                 }
@@ -271,51 +336,55 @@ F.plugins.pageModule = {
             internal: internal.join(','),
             special: special
         };
-    },
+    };
 
-    parseEventsHandler: function(module, key) {
-        var handlerName = module.events[key];
-        if (_.isUndefined(module[handlerName]) || !_.isFunction(module[handlerName])) {
+    var parseEventsHandler = function(_module, key) {
+        var handlerName = _module.events[key];
+        if (_.isUndefined(_module[handlerName]) || !_.isFunction(_module[handlerName])) {
             throw "Incorrect handler for events " + key;
         }
-        return module[handlerName];
-    },
+        return _module[handlerName];
+    };
 
-    applyBinding: function(module, selectors, events, handler) {
+    var applyBinding = function(_module, selectors, events, handler) {
         if (_.size(selectors.internal) > 0) {
-            module.$el.on(events,
-                          selectors.internal,
-                          _.bind(handler, module));
+            _module.$el.on(events,
+                selectors.internal,
+                _.bind(handler, _module));
         }
 
         if (_.size(selectors.external) > 0) {
-            $(selectors.external).on(events, _.bind(handler, module));
+            $(selectors.external).on(events, _.bind(handler, _module));
         }
 
         if (_.size(selectors.special) > 0) {
             _.each(selectors.special, function(specialSelector) {
-                $(specialSelector).on(events, _.bind(handler, module));
+                $(specialSelector).on(events, _.bind(handler, _module));
             });
         }
 
         if (_.size(selectors.cached) > 0) {
             _.each(selectors.cached, function(cachedSelector) {
-                cachedSelector.on(events, _.bind(handler, module));
+                cachedSelector.on(events, _.bind(handler, _module));
             });
         }
-    },
+    };
 
-    checkEventsObject: function(module) {
+    var checkEventsObject = function(_module) {
         var key;
-        if (!module.events) {
+        if (!_module.events) {
             return;
         }
-        for (key in module.events) {
-            if(_.has(module.events, key)){
-                if (!module.events[key]) {
+        for (key in _module.events) {
+            if(_.has(_module.events, key)){
+                if (!_module.events[key]) {
                     throw "event object is incorrect";
                 }
             }
         }
-    }
-};
+    };
+
+    F.plugins.pageModule = {
+        initModule: initModule
+    };
+}(F));

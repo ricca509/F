@@ -2,8 +2,16 @@
 // The method that has to be present is the initModule, called by the core F lib
 
 // Default Module
-F.plugins.defaultModule = {
-    initModule: function (module) {
-        return module;
-    }
-};
+(function(F) {
+    'use strict';
+    var _module;
+
+    var initModule = function (module) {
+        _module = module;
+        return _module;
+    };
+
+    F.plugins.defaultModule = {
+        initModule: initModule
+    };
+}(F));

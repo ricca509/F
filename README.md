@@ -6,7 +6,7 @@ The F library is built with the purpose of working on multiple page applications
 
 ### Dependencies
 * underscore.js
-* jQuery (only if you usa the *Page* module)
+* jQuery (only if you use the *Page* module)
 
 ### Usage
 Just grab the uncompressed version `/dist/F.js` or the minified version `/dist/F.min.js`

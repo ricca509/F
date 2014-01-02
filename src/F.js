@@ -1,4 +1,5 @@
 ;(function (undefined) {
+    'use strict';
     // This is the constructor function. It will be attached to the window object
     // and executed every time we call F(...). Returns a new 'instance' of the library.
     var root, resolveNamespace, initModule,
@@ -118,20 +119,6 @@
         } else {
             throw 'No handler found for ' + handlerName + ' module';
         }
-    };
-
-    // String helpers
-    // TODO: To be moved to a namespace under 'F' or in a plugin file
-    F.trimStart = function(str) {
-        return str.replace(/^\s+/, '');
-    };
-
-    F.trimEnd = function(str) {
-        return str.replace(/\s+$/, '');
-    };
-
-    F.trim = function(str) {
-        return str.replace(/(^\s+|\s+$)/g,'');
     };
 
     // Create the 'fn' object which is the same as 'prototype' to enable a simpler way to extend the library

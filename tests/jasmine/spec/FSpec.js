@@ -111,24 +111,6 @@ describe('The F library', function() {
         expect(callbacks.onAfter.calls.length).toEqual(1);
     });
 
-    it('can trim string at the beginning', function() {
-        var str = '  hello';
-        expect(str.length).toBe(7);
-        expect(F.trimStart(str).length).toBe(5);
-    });
-
-    it('can trim string at the end', function() {
-        var str = 'hello  ';
-        expect(str.length).toBe(7);
-        expect(F.trimEnd(str).length).toBe(5);
-    });
-
-    it('can trim strings', function() {
-        var str = '  hello  ';
-        expect(str.length).toBe(9);
-        expect(F.trim(str).length).toBe(5);
-    });
-
     it('can extend an object with another one', function() {
         var callbacks = {
             onAfterExtended: function(module) {

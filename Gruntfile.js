@@ -18,10 +18,12 @@ module.exports = function(grunt) {
         concat: {
             dist: {
                 src: ['src/F.js',
+                    'src/F.evt.js',
+                    'src/F.str.js',
                     'src/plugins/F.plugins.defaultModule.js',
                     'src/plugins/F.plugins.pageModule.js'],
-                dest: 'dist/F.js',
-            },
+                dest: 'dist/F.js'
+            }
         },
         watch: {
             dist: {
