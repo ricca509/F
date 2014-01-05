@@ -28,7 +28,7 @@ module.exports = function(grunt) {
         watch: {
             dist: {
                 files: ['src/**/*.js'],
-                tasks: ['jshint', 'concat', 'strip', 'uglify']
+                tasks: ['jshint', 'concat', 'strip', 'uglify', 'jasmine']
             }
         },
         uglify: {

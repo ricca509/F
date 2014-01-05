@@ -286,7 +286,7 @@
         checkEventsObject();
         for (key in _module.events) {
             if(_.has(_module.events, key)){
-                handler = parseEventsHandler(key);
+                handler = parseEventHandler(key);
                 events = parseEvents(key);
                 selectors = parseSelectors(key);
                 // Binding the event: 'this' will be the _module, not the jQuery
@@ -338,12 +338,17 @@
         };
     };
 
-    var parseEventsHandler = function(key) {
-        var handlerName = _module.events[key];
-        if (_.isUndefined(_module[handlerName]) || !_.isFunction(_module[handlerName])) {
+    var parseEventHandler = function(key) {
+        var handler = _module.events[key];
+        if (_.isString(handler)) {
+            handler = _module[handler];
+        }
+
+        if (_.isUndefined(handler) || !_.isFunction(handler)) {
             throw "Incorrect handler for events " + key;
         }
-        return _module[handlerName];
+
+        return handler;
     };
 
     var applyBinding = function(selectors, events, handler) {

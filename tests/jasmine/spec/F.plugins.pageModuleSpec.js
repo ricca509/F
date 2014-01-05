@@ -73,10 +73,10 @@ describe('The plugin F.plugins.pageModule', function() {
                 link: 'a[href="#"]'
             },
             events: {
-                'click ul#list>li.list span, ul#list>li.list span': 'eventHandler',
+                'click ul#list>li.list span': 'eventHandler',
                 'click this.UI.link1, this.UI.link': 'eventHandler',
-                'click @#outside, @#outside': 'eventHandler',
-                'hover @#outside': 'eventHandler',
+                'click @#outside': 'eventHandler',
+                'hover @#outside': 'eventHandler'
             },
             eventHandler: handlers.eventHandler
         });
@@ -137,6 +137,54 @@ describe('The plugin F.plugins.pageModule', function() {
         var instance = F.createInstance('Tests.documentTest');
         $(document).trigger('click');
         expect(test).toBe(1);
+    });
+
+    it('accept the name of the function (as a string) as event handler', function() {
+        var test = 0;
+
+        F.defineModule('Tests.handlerTest', {
+            type: 'page',
+            events: {
+                'click ul#list': 'handler'
+            },
+            handler: function() {
+                test++;
+            }
+        });
+
+        F.createInstance('Tests.handlerTest');
+        expect(test).toBe(0);
+        $('ul#list').trigger('click');
+        expect(test).toBe(1);
+    });
+
+    it('accept a function as event handler', function() {
+        var test = 0, test2 = 0,
+            handlers = {
+                eventHandler: function() {
+                    test++;
+                }
+            };
+
+        F.defineModule('Tests.handlerTest2', {
+            type: 'page',
+            events: {
+                'click ul#list':  function() {
+                    test2++;
+                },
+                'click @#outside': handlers.eventHandler
+            }
+        });
+
+        F.createInstance('Tests.handlerTest2');
+        expect(test).toBe(0);
+        expect(test2).toBe(0);
+        $('ul#list').trigger('click');
+        expect(test2).toBe(1);
+        expect(test).toBe(0);
+        $('#outside').trigger('click');
+        expect(test2).toBe(1);
+
     });
 
     it('does not update the $el if it is provided', function() {
