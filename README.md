@@ -181,13 +181,66 @@ The *core F library* is pretty much this: a simple way to create namespaces that
 The power of the library is the fact that, by using a generic modular system, you can define your own module type and let the library call it for you. The next section explore the modules echosystem.
 
 ### Helpers functions
-While the core of the library will remain small by purpose, the following functions are available:
+While the core of the library will remain small by purpose, there are "addons" that extends it. The following functions are available:
+
+**Core**
 * `F.defineModule(namespaceToCreate, object, afterDefinedCallback);`
 * `F.extendModule(moduleToExtend, moduleThatExtends, extendedModuleNamespace, afterExtendedCallback)`
 * `F.createInstance(module, opts, onBeforeCreate, onAfterCreate)`
-* `F.trimStart(str)`
-* `F.trimEnd(str)`
-* `F.trim(str)`
+
+**String addon `F.str`**
+* `F.str.trimStart(str)`
+* `F.str.trimEnd(str)`
+* `F.str.trim(str)`
+
+**Events: Publisher/Subscriber addon `F.evt`**
+* `F.evt.on(topic, callback)`
+* `F.evt.off(topic, index)`
+* `F.evt.trigger(topic, args)`
+
+## Addons
+
+### Events Publisher/Subscriber `F.evt`
+An events addon can be found under `F.evt`.
+
+#### The `on` method
+You can subscribe to an event with the `on` method. You have to pass the event name and a callback.
+
+`F.evt.on(topic, callback)`
+
+returns an index, that can be used to unscribe from the event.
+
+```javascript
+var key = F.evt.on('test', function(args) {
+    console.log('Test ' + args);
+});
+```
+
+#### The `trigger` method
+You can trigger an event with the `trigger` method, it accepts the name of the event and the arguments you want to publish with the event.
+
+```javascript
+var key = F.evt.on('test', function(args) {
+    console.log('Test ' + args);
+});
+
+F.evt.trigger('test', ['one', 'two']);
+```
+
+#### The `off` method
+You can unscribe from an event using the event name and the `index` returned by the `on` method.
+
+`F.evt.off(topic, index)`
+
+```javascript
+var key = F.evt.on('test', function(args) {
+    console.log('Test ' + args);
+});
+
+F.evt.trigger('test', ['one', 'two']);
+
+F.evt.off('test', key);
+```
 
 ## The modules ecosystem
 
@@ -288,7 +341,7 @@ F.defineModule('F.Tests.PageModule1', {
     },
     // Declarative event binding
     events: {
-        'click ul#list>li.list span, this.UI.link1, this.UI.link, @#outside': 'handleLink'
+        'click ul#list>li.list span, this.UI.moreButton, @#outside': 'handleLink'
     },
     handleLink: function (ev) {
         ev.preventDefault();
