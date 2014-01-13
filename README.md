@@ -286,34 +286,42 @@ The declarative event binding is achieved by using the `events` object:
 
 ```javascript
 events: {
-    'click ul#list>li.list span': 'handleLink'
+    'click': {
+        'ul#list>li.list span': 'handleLink'
+    } 
 }
 ```
-The first word is always the event name (`click`, in this case). 
-The remaining words in the string represent the selector list.
-On the right side, we have the name of the handler function, that has to be declared inside the module.
+The properties of the "events" object are always the event (or events) name (`click`, in this case). 
+The value of each property is an object itself. The left side contains the selector as key.
+On the right side, we have the name of the handler function as value, that has to be declared inside the module.
 
 **Selectors type and syntax**
 - **Normal** jQuery CSS selector, **scoped** to the el element: just write the plain jQuery selector.
 
 ```javascript
 events: {
-    'click ul#list>li.list span': 'handleLink'
+    'click': {
+    '   ul#list>li.list span': 'handleLink'
+    }
 }
 ```
 - **Cached** element, defined in the UI object: use the normal object sintax.
 
 ```javascript
 events: {
-    'click this.UI.link1': 'handleLink'
+    'click': {
+        'this.UI.link1': 'handleLink'
+    } 
 }
 ```
 - **External** element, access elements outside el, 'document' and window included: prepend the `@` symbol before the CSS selector (or `@window`, `@document`)
 
 ```javascript
 events: {
-    'click @#outside': 'handleLink',
-    'click @document': 'handleLink',
+    'click': {
+        '@#outside': 'handleLink',
+        '@document': 'handleLink'
+    }
 }
 ```
 
@@ -341,7 +349,9 @@ F.defineModule('F.Tests.PageModule1', {
     },
     // Declarative event binding
     events: {
-        'click ul#list>li.list span, this.UI.moreButton, @#outside': 'handleLink'
+        'click': {
+            'ul#list>li.list span, this.UI.moreButton, @#outside': 'handleLink'
+        }
     },
     handleLink: function (ev) {
         ev.preventDefault();
