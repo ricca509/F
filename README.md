@@ -6,7 +6,7 @@ The F library is built with the purpose of working on multiple page applications
 
 ### Dependencies
 * underscore.js
-* jQuery (only if you use the *Page* module)
+* jQuery (only if you use the *Dom* module)
 
 ### Usage
 Just grab the uncompressed version `/dist/F.js` or the minified version `/dist/F.min.js`
@@ -244,20 +244,20 @@ F.evt.off('test', key);
 
 ## The modules ecosystem
 
-### The *page* module (`type: 'page'`)
+### The *dom* module (`type: 'dom'`)
 
-The *page* module makes it easy to work with DOM related stuff. It offers:
+The *dom* module makes it easy to work with DOM related stuff. It offers:
 
 * declarative event binding
 * auto scoping to a root element
 * selectors caching (UI declaration)
 * jQuery shortcuts
 
-Make sure to define the right `type` property when you define your module if you want to use the features of the *page* module:
+Make sure to define the right `type` property when you define your module if you want to use the features of the *dom* module:
 
 ```javascript
-F.defineModule('F.Tests.PageModule', {
-    type: 'page'
+F.defineModule('F.Tests.DomModule', {
+    type: 'dom'
 });
 ```
 #### The `el` element
@@ -279,7 +279,10 @@ UI: {
     outside: '#outside'
 }
 ```
-The key is the hortcut name, the value is the jQuery CSS selector. You'll be able to access the elements with `this.UI.name`
+The key is the shortcut name, the value is the jQuery CSS selector. You'll be able to access the elements with `this.UI.name`.
+For every key in the UI object, as soon as you'll create an instance of the object you will get the jQuery oject associated to that selector. You can access the jQuery object by preceding the name with a $:
+
+(string selector) `this.UI.articleList` -> (jQuery object) `this.UI.$articleList`
 
 #### The `events` object
 The declarative event binding is achieved by using the `events` object:
@@ -326,12 +329,12 @@ events: {
 ```
 
 ### Complete example
-The complete list of properties for the *pageModule* follows:
+The complete list of properties for the *domModule* follows:
 
 ```javascript
-F.defineModule('F.Tests.PageModule1', {
+F.defineModule('F.Tests.DomModule1', {
     // Always define the type property correctly
-    type: 'page',
+    type: 'dom',
     // Define the root element of your module.
     // The module will have the scope restricted to this element
     // for increased security
@@ -389,11 +392,19 @@ The `F.plugins.fooModule` will have to expose the `initModule` function. It will
 An example of an `initModule` defined for our `F.plugins.fooModule` function is as follows:
 
 ```javascript
-F.plugins.fooModule = {
-    initModule: function (module) {
-        return module;
-    }
-};
+(function(F) {
+    'use strict';
+    var _module;
+    
+    var initModule = function (module) {
+        _module = module;
+        return _module;
+    };
+
+    F.plugins.defaultModule = {
+        initModule: initModule
+    };
+}(F));
 ```
 
 You can find an example under ` /src/plugins/F.plugins.defaultModule.js`
