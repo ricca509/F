@@ -1,5 +1,5 @@
-F.defineModule("F.Tests.TestPageModule", {
-    type: 'page',
+F.defineModule("F.Tests.TestdomModule", {
+    type: 'dom',
     defaults: {
         numArticles: 5
     },
@@ -10,8 +10,12 @@ F.defineModule("F.Tests.TestPageModule", {
         outside: '#outside'
     },
     events: {
-        'click ul>li.list img, this.UI.articleList, @window, #test, @#external > ul': 'handleLink',
-        'focus ul>li.list img, this.UI.articleList, @window, #test, @#external > ul': 'handleLink'
+        'click' : {
+            'ul>li.list img, this.UI.articleList, @window, #test, @#external > ul': 'handleLink'
+       },
+       'focus': {
+           'ul>li.list img, this.UI.articleList, @window, #test, @#external > ul': 'handleLink'
+       }
     },
     handleLink: function (ev) {
         ev.preventDefault();
@@ -33,16 +37,16 @@ afterEach(function() {
     $('#dom-test-container').remove();
 });
 
-describe('The plugin F.plugins.pageModule', function() {
+describe('The plugin F.plugins.domModule', function() {
     it('converts the "el" selector in a jQuery element ($el)', function() {
 
-        var instance = F.createInstance(F.Tests.TestPageModule);
+        var instance = F.createInstance(F.Tests.TestdomModule);
         expect(instance.$el).toBeDefined();
         expect(instance.$el.length).toBe(1);
     });
 
     it('converts the UI object in jQuery elements', function() {
-        var instance = F.createInstance(F.Tests.TestPageModule);
+        var instance = F.createInstance(F.Tests.TestdomModule);
         expect(instance.UI).toBeDefined();
         expect(instance.UI.articleList).toBe('#article-list');
         expect(instance.UI.$articleList).toBeDefined();
@@ -50,12 +54,12 @@ describe('The plugin F.plugins.pageModule', function() {
     });
 
     it('adds a module.$ function as a shortcut to module.$el.find', function() {
-        var instance = F.createInstance(F.Tests.TestPageModule);
+        var instance = F.createInstance(F.Tests.TestdomModule);
         expect(instance.$).toBeDefined();
     });
 
     it('make sure that module.$ finds only element in the scope of module.$el', function() {
-        var instance = F.createInstance(F.Tests.TestPageModule);
+        var instance = F.createInstance(F.Tests.TestdomModule);
         expect(instance.UI.$outside.length).toBe(0);
     });
 
@@ -67,16 +71,20 @@ describe('The plugin F.plugins.pageModule', function() {
             }
         };
         F.defineModule('Tests.eventsMod', {
-            type: 'page',
+            type: 'dom',
             el: '#test',
             UI: {
                 link: 'a[href="#"]'
             },
             events: {
-                'click ul#list>li.list span': 'eventHandler',
-                'click this.UI.link1, this.UI.link': 'eventHandler',
-                'click @#outside': 'eventHandler',
-                'hover @#outside': 'eventHandler'
+                'click': {
+                    'ul#list>li.list span': 'eventHandler',
+                    'this.UI.link1, this.UI.link': 'eventHandler',
+                    '@#outside': 'eventHandler'
+                },
+                'hover': {
+                    '@#outside': 'eventHandler'
+                }
             },
             eventHandler: handlers.eventHandler
         });
@@ -107,9 +115,11 @@ describe('The plugin F.plugins.pageModule', function() {
             }
         };
         F.defineModule('Tests.windowTest', {
-            type: 'page',
+            type: 'dom',
             events: {
-                'click @window': 'eventHandler'
+                'click': {
+                    '@window': 'eventHandler'
+                }
             },
             eventHandler: handlers.eventHandler
         });
@@ -127,9 +137,11 @@ describe('The plugin F.plugins.pageModule', function() {
             }
         };
         F.defineModule('Tests.documentTest', {
-            type: 'page',
+            type: 'dom',
             events: {
-                'click @document': 'eventHandler'
+                'click': {
+                    '@document': 'eventHandler'
+                }
             },
             eventHandler: handlers.eventHandler
         });
@@ -143,9 +155,11 @@ describe('The plugin F.plugins.pageModule', function() {
         var test = 0;
 
         F.defineModule('Tests.handlerTest', {
-            type: 'page',
+            type: 'dom',
             events: {
-                'click ul#list': 'handler'
+                'click': {
+                    'ul#list': 'handler'
+                }
             },
             handler: function() {
                 test++;
@@ -167,12 +181,14 @@ describe('The plugin F.plugins.pageModule', function() {
             };
 
         F.defineModule('Tests.handlerTest2', {
-            type: 'page',
+            type: 'dom',
             events: {
-                'click ul#list':  function() {
-                    test2++;
-                },
-                'click @#outside': handlers.eventHandler
+                'click': {
+                    'ul#list':  function() {
+                        test2++;
+                    },
+                    '@#outside': handlers.eventHandler
+               }
             }
         });
 
@@ -190,7 +206,7 @@ describe('The plugin F.plugins.pageModule', function() {
     it('does not update the $el if it is provided', function() {
         var $el = $('#list');
         F.defineModule('Tests.eventsMod.$elTest', {
-            type: 'page',
+            type: 'dom',
             el: '.test'
         });
 

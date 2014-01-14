@@ -21,7 +21,7 @@ module.exports = function(grunt) {
                     'src/F.evt.js',
                     'src/F.str.js',
                     'src/plugins/F.plugins.defaultModule.js',
-                    'src/plugins/F.plugins.pageModule.js'],
+                    'src/plugins/F.plugins.domModule.js'],
                 dest: 'dist/F.js'
             }
         },

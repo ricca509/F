@@ -1,4 +1,4 @@
-// Page Module
+// Dom Module
 (function(F) {
     'use strict';
     var _module;
@@ -44,28 +44,28 @@
     };
 
     var bindEvents = function() {
-        // 'click this.UI.tipTrigger, @#external-el > ul > li': Link1'
-        var key, handler, events, selectors;
+        var events;
         checkEventsObject();
-        for (key in _module.events) {
-            if(_.has(_module.events, key)){
-                handler = parseEventHandler(key);
-                events = parseEvents(key);
-                selectors = parseSelectors(key);
-                // Binding the event: 'this' will be the _module, not the jQuery
-                // element
-                applyBinding(selectors, events, handler);
+        for (events in _module.events) {
+            if(_.has(_module.events, events)){
+                bindAllSelectorToEvents(events);
             }
         }
     };
 
-    var parseEvents = function(key) {
-        return _.first(key.split(' '));
+    var bindAllSelectorToEvents = function(events){
+        var handler, selectors, leftSide;
+        for (leftSide in _module.events[events]) {
+            handler = parseEventHandler(leftSide, _module.events[events][leftSide]);
+            selectors = parseSelectors(leftSide, _module.events[events][leftSide]);
+
+            applyBinding(selectors, events, handler);
+        }
     };
 
-    var parseSelectors = function(key) {
-        var left = key.split(' ');
-        var selectorsList = _.without(left, _.first(left)).join(' ').split(',');
+    var parseSelectors = function(key, value) {
+        var left = key;
+        var selectorsList = left.split(',');
         var cached = [], external = [], internal = [], special = [], tmpEl,
             specialSelectorsList = {
                 'document': document,
@@ -101,8 +101,8 @@
         };
     };
 
-    var parseEventHandler = function(key) {
-        var handler = _module.events[key];
+    var parseEventHandler = function(key, value) {
+        var handler = value;
         if (_.isString(handler)) {
             handler = _module[handler];
         }
@@ -115,6 +115,8 @@
     };
 
     var applyBinding = function(selectors, events, handler) {
+        // Binding the event: 'this' will be the _module, not the jQuery
+        // element
         if (_.size(selectors.internal) > 0) {
             _module.$el.on(events,
                 selectors.internal,
@@ -152,7 +154,7 @@
         }
     };
 
-    F.plugins.pageModule = {
+    F.plugins.domModule = {
         initModule: initModule
     };
 }(F));
