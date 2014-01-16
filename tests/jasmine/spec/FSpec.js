@@ -22,6 +22,11 @@ F.defineModule("F.Tests.TestModule", {
 
 describe('The F library', function() {
 
+    it('expose a version property of type string', function() {
+        expect(F.version).toBeDefined();
+        expect(_.isString(F.version)).toBe(true);
+    });
+
     it('can create an object given a complex namespace ("F.Tests.Module1")', function(){
         F.defineModule("F.Tests.Module1");
         expect(F.Tests.type).not.toBeDefined();
@@ -109,6 +114,21 @@ describe('The F library', function() {
         expect(callbacks.onAfter).toHaveBeenCalled();
         expect(callbacks.onBefore.calls.length).toEqual(1);
         expect(callbacks.onAfter.calls.length).toEqual(1);
+    });
+
+    it('calls the init function of the module (if provided) when creating an instance', function() {
+        var test = 0;
+        F.defineModule('F.tests.initTest', {
+            init: function() {
+                test++;
+            }
+        })
+
+        expect(test).toBe(0);
+
+        F.createInstance('F.tests.initTest');
+
+        expect(test).toBe(1);
     });
 
     it('can extend an object with another one', function() {

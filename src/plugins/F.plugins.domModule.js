@@ -10,10 +10,6 @@
         resolveSelectors();
         bindEvents();
 
-        if(!_.isUndefined(_module.init) && _.isFunction(_module.init)) {
-            _module.init.call(_module);
-        }
-
         return _module;
     };
 

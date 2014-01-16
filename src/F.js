@@ -69,8 +69,6 @@
         }
 
         if (!_.isUndefined(afterDefined) && _.isFunction(afterDefined)) {
-            // TODO: check this to invoke the callback with apply and pass the
-            // right context (this)
             afterDefined(module);
         }
     };
@@ -106,10 +104,14 @@
         if(!_.isUndefined(moduleHandler) && _.isFunction(moduleHandler.initModule)) {
             if(!_.isUndefined(onBeforeCreate) && _.isFunction(onBeforeCreate)) {
                 onBeforeCreate.call(newMod, newMod);
-
             }
             // Call the right handler, passing the handler itself as a scope
             decoratedModule = moduleHandler.initModule.call(moduleHandler, newMod);
+
+            // Call the init function of the module if provided
+            if(!_.isUndefined(decoratedModule.init) && _.isFunction(decoratedModule.init)) {
+                decoratedModule.init.call(decoratedModule);
+            }
 
             if(!_.isUndefined(onAfterCreate) && _.isFunction(onAfterCreate)) {
                 onAfterCreate.call(decoratedModule, decoratedModule);
@@ -144,6 +146,9 @@
 
     // Plugins object for extendibility
     F.plugins = {};
+
+    // Version
+    F.version = '0.10';
 
     // Attach the constructor function to the window object
     root.F = F;
