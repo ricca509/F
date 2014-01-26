@@ -8,8 +8,14 @@ The F library is built with the purpose of working on multiple page applications
 * underscore.js
 * jQuery (only if you use the *Dom* module)
 
-### Usage
-Just grab the uncompressed version `/dist/F.js` or the minified version `/dist/F.min.js`
+### Install it
+
+#### with Bower
+```
+$ bower install F
+```
+#### or grab the latest release
+https://github.com/ricca509/F/releases
 
 ## Core module
 
