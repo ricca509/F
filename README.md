@@ -109,21 +109,7 @@ You can extend your modules (only object modules at the moment). This allows you
 ```javascript
 F.extendModule(moduleToExtend, moduleThatExtends, extendedModuleNamespace, afterExtendedCallback)
 ```
-
-**Extend a plain object with another one:**
-```javascript
-// Create a new module "F.newExtendedModule"
-// from two plain objects 
-// (the extended object will have the "type" property set to "default")
-F.extendModule({
-        a: '1',
-        b: '2'
-    }, {
-        c: '3',
-        d: '4'
-}, 'F.newExtendedModule');
-```
-**Extend an module with an object:**
+**Extend a module with an object:**
 ```javascript
 // Define an object module "F.objA"
 F.defineModule('F.objA', {
@@ -138,6 +124,20 @@ F.defineModule('F.objA', {
 F.extendModule('F.objA', {
     three: 5,
     four: true
+}, 'F.newExtendedModule');
+```
+
+**Extend a plain object with another one:**
+```javascript
+// Create a new module "F.newExtendedModule"
+// from two plain objects 
+// (the extended object will have the "type" property set to "default")
+F.extendModule({
+        a: '1',
+        b: '2'
+    }, {
+        c: '3',
+        d: '4'
 }, 'F.newExtendedModule');
 ```
 

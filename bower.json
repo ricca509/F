@@ -1,13 +1,13 @@
 {
   "name": "F",
-  "main": "F.js",
-  "version": "0.0.0",
-  "description": "The F library",
+  "main": "F.min.js",
+  "version": "0.10.0",
+  "description": "A small, modular library that helps writing structured, testable and namespaced code, plus providing DOM and utility helpers.",
   "authors": [
     "Riccardo Coppola <ricca509@gmail.com>"
   ],
   "license": "MIT",
-  "private": true,
+  "private": false,
   "ignore": [
     "**/.*",
     "node_modules",
@@ -17,7 +17,7 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": "~2.0.3",
+    "jquery": "~1.11.0",
     "underscore": "~1.5.2"
   }
 }
