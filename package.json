@@ -1,6 +1,6 @@
 {
   "name": "F",
-  "version": "0.0.0",
+  "version": "0.1.1",
   "description": "The F library",
   "main": "F.js",
   "directories": {
@@ -18,6 +18,10 @@
     "grunt-contrib-watch": "~0.5.3",
     "grunt-contrib-uglify": "~0.2.7",
     "grunt-strip": "~0.2.1",
-    "grunt-contrib-jasmine": "~0.5.2"
+    "grunt-contrib-jasmine": "~0.5.2",
+    "grunt-jscs-checker": "~0.3.2"
+  },
+  "dependencies": {
+    "coveralls": "~2.7.0"
   }
 }

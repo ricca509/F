@@ -1,4 +1,4 @@
-F.defineModule("F.Tests.TestdomModule", {
+F.defineModule('F.Tests.TestdomModule', {
     type: 'dom',
     defaults: {
         numArticles: 5
@@ -10,7 +10,7 @@ F.defineModule("F.Tests.TestdomModule", {
         outside: '#outside'
     },
     events: {
-        'click' : {
+        'click': {
             'ul>li.list img, this.UI.articleList, @window, #test, @#external > ul': 'handleLink'
        },
        'focus': {
@@ -21,7 +21,7 @@ F.defineModule("F.Tests.TestdomModule", {
         ev.preventDefault();
     },
     test: function() {
-        console.log("Test called");
+        console.log('Test called');
     },
     init: function() {
         this.test();

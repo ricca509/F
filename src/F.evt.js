@@ -5,7 +5,7 @@
 
     var trigger = function(topic, args) {
         var i, callback;
-        if(!calls[topic]) {
+        if (!calls[topic]) {
             return;
         }
 
@@ -18,10 +18,10 @@
     };
 
     var on = function(topic, callback) {
-        if(topic.trim().length === 0) {
+        if (topic.trim().length === 0) {
             return false;
         }
-        if(!calls[topic]) {
+        if (!calls[topic]) {
             calls[topic] = [];
         }
         return calls[topic].push(callback);

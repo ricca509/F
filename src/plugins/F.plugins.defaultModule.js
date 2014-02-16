@@ -4,9 +4,9 @@
 // Default Module
 (function(F) {
     'use strict';
-    var _module;
+    var _module,
 
-    var initModule = function (module) {
+    initModule = function (module) {
         _module = module;
         return _module;
     };

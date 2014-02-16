@@ -1,4 +1,4 @@
-F.defineModule("F.Tests.TestModule", {
+F.defineModule('F.Tests.TestModule', {
     defaults: {
         numArticles: 5
     },
@@ -12,7 +12,7 @@ F.defineModule("F.Tests.TestModule", {
         ev.preventDefault();
     },
     test: function() {
-        console.log("Test called");
+        console.log('Test called');
     },
     init: function() {
         this.test();
@@ -27,23 +27,23 @@ describe('The F library', function() {
         expect(_.isString(F.version)).toBe(true);
     });
 
-    it('can create an object given a complex namespace ("F.Tests.Module1")', function(){
-        F.defineModule("F.Tests.Module1");
+    it('can create an object given a complex namespace ("F.Tests.Module1")', function() {
+        F.defineModule('F.Tests.Module1');
         expect(F.Tests.type).not.toBeDefined();
         expect(F.Tests.Module1).toBeDefined();
         expect(F.Tests.Module1.type).toBeDefined();
     });
 
     it('can create a namespace even for a number or a string', function() {
-        F.defineModule("F.Tests.NumberMod", 5);
-        F.defineModule("F.Tests.StringMod", 'test');
+        F.defineModule('F.Tests.NumberMod', 5);
+        F.defineModule('F.Tests.StringMod', 'test');
 
         expect(F.Tests.NumberMod).toBe(5);
         expect(F.Tests.StringMod).toBe('test');
-    })
+    });
 
-    it('assign the object a "default" type', function(){
-        F.defineModule("F.Tests.Module2");
+    it('assign the object a "default" type', function() {
+        F.defineModule('F.Tests.Module2');
         expect(F.Tests.Module2.type).toBeDefined();
         expect(F.Tests.Module2.type).toBe('default');
     });
@@ -56,9 +56,9 @@ describe('The F library', function() {
             }
         };
 
-        spyOn(callbacks, "onAfterDefined");
+        spyOn(callbacks, 'onAfterDefined');
 
-        F.defineModule("F.Tests.Module3", {
+        F.defineModule('F.Tests.Module3', {
             a: 2,
             b: 3
         }, callbacks.onAfterDefined);
@@ -105,8 +105,8 @@ describe('The F library', function() {
                 console.log(module);
             }
         };
-        spyOn(callbacks, "onBefore");
-        spyOn(callbacks, "onAfter");
+        spyOn(callbacks, 'onBefore');
+        spyOn(callbacks, 'onAfter');
         var instance = F.createInstance(F.Tests.TestModule, {},
             callbacks.onBefore, callbacks.onAfter);
 
@@ -122,7 +122,7 @@ describe('The F library', function() {
             init: function() {
                 test++;
             }
-        })
+        });
 
         expect(test).toBe(0);
 
@@ -139,7 +139,7 @@ describe('The F library', function() {
             }
         };
 
-        spyOn(callbacks, "onAfterExtended");
+        spyOn(callbacks, 'onAfterExtended');
         expect(_.isFunction(F.extendModule)).toBe(true);
 
         F.extendModule({
@@ -169,13 +169,13 @@ describe('The F library', function() {
             }
         };
 
-        spyOn(callbacks, "onAfterExtended");
+        spyOn(callbacks, 'onAfterExtended');
         expect(_.isFunction(F.extendModule)).toBe(true);
 
         F.defineModule('F.extended.objA', {
             one: 'string',
             two: function() {
-                return 'function two'
+                return 'function two';
             }
         });
 
@@ -193,11 +193,5 @@ describe('The F library', function() {
         expect(callbacks.onAfterExtended.calls.length).toEqual(1);
 
     });
-
-    // TODO: To be tested properly
-    // it('can be register under any other name', function() {
-    //     F.init("App");
-    //     expect(window.App).not.toBeUndefined();
-    // });
 
 });

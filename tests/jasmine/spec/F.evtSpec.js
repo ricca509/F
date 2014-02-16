@@ -1,10 +1,10 @@
 describe('The event module F.evt', function() {
-    it("let one subscribe to events", function() {
-        var key = F.evt.on("test", function(args) {
+    it('let one subscribe to events', function() {
+        var key = F.evt.on('test', function(args) {
             console.log('Test ' + args);
         });
 
-        var key2 = F.evt.on("", function(args) {
+        var key2 = F.evt.on('', function(args) {
             console.log('Test ' + args);
         });
 
@@ -12,7 +12,7 @@ describe('The event module F.evt', function() {
         expect(key2).toBe(false);
     });
 
-    it("can publish events", function() {
+    it('can publish events', function() {
         var callbacks = {
             one: function(args) {
             }
@@ -27,7 +27,7 @@ describe('The event module F.evt', function() {
         expect(callbacks.one).toHaveBeenCalledWith(['one', 'two']);
     });
 
-    it("let one to unsubscribe from an event", function() {
+    it('let one to unsubscribe from an event', function() {
         var callbacks = {
             one: function(args) {
             }
@@ -46,7 +46,7 @@ describe('The event module F.evt', function() {
 
         expect(callbacks.one.calls.length).toEqual(2);
 
-        expect(F.evt.off("test", 7)).toBe(false);
+        expect(F.evt.off('test', 7)).toBe(false);
 
         F.evt.trigger('test', ['one', 'two']);
 

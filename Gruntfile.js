@@ -3,7 +3,13 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         jshint: {
-            all: ['Gruntfile.js', 'src/**/*.js', 'tests/*.js']
+            all: ['Gruntfile.js', 'src/**/*.js', 'tests/jasmine/spec/**/*.js']
+        },
+        jscs: {
+            src: ["src/**/*.js", 'tests/jasmine/spec/**/*.js'],
+            options: {
+                config: ".jscs.json"
+            }
         },
         jasmine: {
             src: 'dist/F.js',
@@ -20,33 +26,28 @@ module.exports = function(grunt) {
                 src: ['src/F.js',
                     'src/F.evt.js',
                     'src/F.str.js',
-                    'src/plugins/F.plugins.defaultModule.js',
-                    'src/plugins/F.plugins.domModule.js'],
+                    'src/plugins/*.js'],
                 dest: 'dist/F.js'
             }
         },
         watch: {
             dist: {
                 files: ['src/**/*.js'],
-                tasks: ['jshint', 'concat', 'strip', 'uglify', 'jasmine']
+                tasks: ['jshint', 'jscs', 'concat', 'uglify:dist', 'jasmine']
             }
         },
         uglify: {
-            f_library: {
+            dist: {
                 files: {
                     'dist/F.min.js': ['dist/F.js']
-                }
-            }
-        },
-        strip : {
-            main : {
-                src : 'dist/F.js',
-                options : {
-                    inline : true
+                },
+                options: {
+                    compress: {
+                        drop_console: true
+                    }
                 }
             }
         }
-
     });
 
     grunt.loadNpmTasks('grunt-contrib-jshint');
@@ -54,8 +55,10 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
-    grunt.loadNpmTasks('grunt-strip');
+    grunt.loadNpmTasks("grunt-jscs-checker");
 
     grunt.registerTask('default', ['jshint']);
+    grunt.registerTask('build', ['jshint', 'jscs', 'concat', 'uglify:dist', 'jasmine']);
+    grunt.registerTask('test', ['jasmine']);
 
 };
