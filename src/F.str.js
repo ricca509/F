@@ -1,15 +1,15 @@
-(function(F) {
+(function (F) {
     'use strict';
     // String helpers
-    var trimStart = function(str) {
+    var trimStart = function (str) {
         return str.replace(/^\s+/, '');
     },
 
-    trimEnd = function(str) {
+    trimEnd = function (str) {
         return str.replace(/\s+$/, '');
     },
 
-    trim = function(str) {
+    trim = function (str) {
         return str.replace(/(^\s+|\s+$)/g,'');
     };
 

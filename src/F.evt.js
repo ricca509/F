@@ -1,9 +1,9 @@
-(function(F) {
+(function (F) {
     'use strict';
     // Callbacks bucket
     var calls = {};
 
-    var trigger = function(topic, args) {
+    var trigger = function (topic, args) {
         var i, callback;
         if (!calls[topic]) {
             return;
@@ -17,7 +17,7 @@
         }
     };
 
-    var on = function(topic, callback) {
+    var on = function (topic, callback) {
         if (topic.trim().length === 0) {
             return false;
         }
@@ -27,7 +27,7 @@
         return calls[topic].push(callback);
     };
 
-    var off = function(topic, index) {
+    var off = function (topic, index) {
         index = index - 1;
         if (!calls[topic] || !calls[topic][index]) {
             return false;

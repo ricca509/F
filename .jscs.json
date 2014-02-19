@@ -21,6 +21,7 @@
     ],
     "requireParenthesesAroundIIFE": true,
     "requireSpacesInFunctionExpression": {
+        "beforeOpeningRoundBrace": true,
         "beforeOpeningCurlyBrace": true
     },
     "disallowEmptyBlocks": true,

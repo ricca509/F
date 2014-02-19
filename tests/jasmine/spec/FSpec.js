@@ -11,30 +11,30 @@ F.defineModule('F.Tests.TestModule', {
     handleLink: function (ev) {
         ev.preventDefault();
     },
-    test: function() {
+    test: function () {
         console.log('Test called');
     },
-    init: function() {
+    init: function () {
         this.test();
         this.a = 10;
     }
 });
 
-describe('The F library', function() {
+describe('The F library', function () {
 
-    it('expose a version property of type string', function() {
+    it('expose a version property of type string', function () {
         expect(F.version).toBeDefined();
         expect(_.isString(F.version)).toBe(true);
     });
 
-    it('can create an object given a complex namespace ("F.Tests.Module1")', function() {
+    it('can create an object given a complex namespace ("F.Tests.Module1")', function () {
         F.defineModule('F.Tests.Module1');
         expect(F.Tests.type).not.toBeDefined();
         expect(F.Tests.Module1).toBeDefined();
         expect(F.Tests.Module1.type).toBeDefined();
     });
 
-    it('can create a namespace even for a number or a string', function() {
+    it('can create a namespace even for a number or a string', function () {
         F.defineModule('F.Tests.NumberMod', 5);
         F.defineModule('F.Tests.StringMod', 'test');
 
@@ -42,15 +42,15 @@ describe('The F library', function() {
         expect(F.Tests.StringMod).toBe('test');
     });
 
-    it('assign the object a "default" type', function() {
+    it('assign the object a "default" type', function () {
         F.defineModule('F.Tests.Module2');
         expect(F.Tests.Module2.type).toBeDefined();
         expect(F.Tests.Module2.type).toBe('default');
     });
 
-    it('calls the "afterDefined" callback when defining a module', function() {
+    it('calls the "afterDefined" callback when defining a module', function () {
         var callbacks = {
-            onAfterDefined: function(module) {
+            onAfterDefined: function (module) {
                 console.log('defined');
                 console.log(module);
             }
@@ -68,7 +68,7 @@ describe('The F library', function() {
     });
 
     it('can create an instance of an existing module ' +
-       '(created with "F.defineModule") with the "F.createInstance" method', function() {
+       '(created with "F.defineModule") with the "F.createInstance" method', function () {
         expect(F.Tests.TestModule).toBeDefined();
         var instance = F.createInstance(F.Tests.TestModule);
         expect(instance.type).toBeDefined();
@@ -78,14 +78,14 @@ describe('The F library', function() {
     });
 
     it('can create an instance of an existing module ' +
-       'even if the string representing the namespace is passed (\'F.Tests.TestModule\')', function() {
+       'even if the string representing the namespace is passed (\'F.Tests.TestModule\')', function () {
         var instance = F.createInstance('F.Tests.TestModule');
         expect(instance.type).toBeDefined();
     });
 
     it('can extend the standard instance of a module with additional configuration. ' +
        'Useful to define the root "el" element for every module we instantiate in a loop.' +
-       'e.g. "var instance = F.createInstance(F.Tests.TestModule, {el: \'body\'});"', function() {
+       'e.g. "var instance = F.createInstance(F.Tests.TestModule, {el: \'body\'});"', function () {
         expect(F.Tests.TestModule.el).toBe('#test');
         var instance = F.createInstance(F.Tests.TestModule, {
             el: 'body'
@@ -94,13 +94,13 @@ describe('The F library', function() {
         expect(instance.el).toBe('body');
     });
 
-    it('calls before and after callbacks if provided', function() {
+    it('calls before and after callbacks if provided', function () {
         var callbacks = {
-            onBefore: function(module) {
+            onBefore: function (module) {
                 console.log('Before');
                 console.log(module);
             },
-            onAfter: function(module) {
+            onAfter: function (module) {
                 console.log('After');
                 console.log(module);
             }
@@ -116,10 +116,10 @@ describe('The F library', function() {
         expect(callbacks.onAfter.calls.length).toEqual(1);
     });
 
-    it('calls the init function of the module (if provided) when creating an instance', function() {
+    it('calls the init function of the module (if provided) when creating an instance', function () {
         var test = 0;
         F.defineModule('F.tests.initTest', {
-            init: function() {
+            init: function () {
                 test++;
             }
         });
@@ -131,9 +131,9 @@ describe('The F library', function() {
         expect(test).toBe(1);
     });
 
-    it('can extend an object with another one', function() {
+    it('can extend an object with another one', function () {
         var callbacks = {
-            onAfterExtended: function(module) {
+            onAfterExtended: function (module) {
                 console.log('defined');
                 console.log(module);
             }
@@ -161,9 +161,9 @@ describe('The F library', function() {
 
     });
 
-    it('can extend an module with an object', function() {
+    it('can extend an module with an object', function () {
         var callbacks = {
-            onAfterExtended: function(module) {
+            onAfterExtended: function (module) {
                 console.log('defined');
                 console.log(module);
             }
@@ -174,7 +174,7 @@ describe('The F library', function() {
 
         F.defineModule('F.extended.objA', {
             one: 'string',
-            two: function() {
+            two: function () {
                 return 'function two';
             }
         });

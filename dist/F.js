@@ -9,7 +9,7 @@
 
     root = this;
 
-    resolveNamespace = function(module) {
+    resolveNamespace = function (module) {
         var ns, obj = window;
 
         if (_.isObject(module)) {
@@ -28,7 +28,7 @@
         return obj;
     };
 
-    initModule = function(module) {
+    initModule = function (module) {
         module.type = module.type || 'default';
         return module;
     };
@@ -73,7 +73,7 @@
         }
     };
 
-    F.extendModule = function(moduleA, moduleB, extendedNamespace, afterExtended) {
+    F.extendModule = function (moduleA, moduleB, extendedNamespace, afterExtended) {
         // An object or string shall be passed.
         var extendedModule;
         moduleA = resolveNamespace(moduleA);
@@ -91,7 +91,7 @@
         }
     };
 
-    F.createInstance = function(module, opts, onBeforeCreate, onAfterCreate) {
+    F.createInstance = function (module, opts, onBeforeCreate, onAfterCreate) {
         // An object or string shall be passed.
         module = resolveNamespace(module);
 
@@ -157,12 +157,12 @@
 
 
 
-(function(F) {
+(function (F) {
     'use strict';
     // Callbacks bucket
     var calls = {};
 
-    var trigger = function(topic, args) {
+    var trigger = function (topic, args) {
         var i, callback;
         if (!calls[topic]) {
             return;
@@ -176,7 +176,7 @@
         }
     };
 
-    var on = function(topic, callback) {
+    var on = function (topic, callback) {
         if (topic.trim().length === 0) {
             return false;
         }
@@ -186,7 +186,7 @@
         return calls[topic].push(callback);
     };
 
-    var off = function(topic, index) {
+    var off = function (topic, index) {
         index = index - 1;
         if (!calls[topic] || !calls[topic][index]) {
             return false;
@@ -202,18 +202,18 @@
     };
 })(F);
 
-(function(F) {
+(function (F) {
     'use strict';
     // String helpers
-    var trimStart = function(str) {
+    var trimStart = function (str) {
         return str.replace(/^\s+/, '');
     },
 
-    trimEnd = function(str) {
+    trimEnd = function (str) {
         return str.replace(/\s+$/, '');
     },
 
-    trim = function(str) {
+    trim = function (str) {
         return str.replace(/(^\s+|\s+$)/g,'');
     };
 
@@ -228,7 +228,7 @@
 // The method that has to be present is the initModule, called by the core F lib
 
 // Default Module
-(function(F) {
+(function (F) {
     'use strict';
     var _module,
 
@@ -242,17 +242,17 @@
     };
 }(F));
 
-(function(F) {
+(function (F) {
     'use strict';
     var _module;
-    var initModule = function(module) {
+    var initModule = function (module) {
         _module = module;
         assignDefaultProps();
         resolveSelectors();
         bindEvents();
         return _module;
     };
-    var assignDefaultProps = function() {
+    var assignDefaultProps = function () {
         if (_module.$el) {
             if (!_module.$el instanceof jQuery) {
                 _module.$el = $('body');
@@ -265,7 +265,7 @@
         }
         _module.$ = _.bind(_module.$el.find, _module.$el);
     };
-    var resolveSelectors = function() {
+    var resolveSelectors = function () {
         var key, newSelectors = {};
         for (key in _module.UI) {
             if (_.has(_module.UI, key)) {
@@ -274,7 +274,7 @@
         }
         _.extend(_module.UI, newSelectors);
     };
-    var bindEvents = function() {
+    var bindEvents = function () {
         var events;
         checkEventsObject();
         for (events in _module.events) {
@@ -283,7 +283,7 @@
             }
         }
     };
-    var bindAllSelectorToEvents = function(events) {
+    var bindAllSelectorToEvents = function (events) {
         var handler, selectors, leftSide;
         for (leftSide in _module.events[events]) {
             handler = parseEventHandler(leftSide, _module.events[events][leftSide]);
@@ -291,14 +291,14 @@
             applyBinding(selectors, events, handler);
         }
     };
-    var parseSelectors = function(key, value) {
+    var parseSelectors = function (key, value) {
         var left = key;
         var selectorsList = left.split(',');
         var cached = [], external = [], internal = [], special = [], tmpEl, specialSelectorsList = {
             document: document,
             window: window
         };
-        _.each(selectorsList, function(selector, idx) {
+        _.each(selectorsList, function (selector, idx) {
             selector = F.str.trim(selector);
             if (selector.indexOf('this.') === 0) {
                 tmpEl = _module.UI['$' + _.last(selector.split('.'))];
@@ -325,7 +325,7 @@
             special: special
         };
     };
-    var parseEventHandler = function(key, value) {
+    var parseEventHandler = function (key, value) {
         var handler = value;
         if (_.isString(handler)) {
             handler = _module[handler];
@@ -335,7 +335,7 @@
         }
         return handler;
     };
-    var applyBinding = function(selectors, events, handler) {
+    var applyBinding = function (selectors, events, handler) {
         if (_.size(selectors.internal) > 0) {
             _module.$el.on(events, selectors.internal, _.bind(handler, _module));
         }
@@ -343,17 +343,17 @@
             $(selectors.external).on(events, _.bind(handler, _module));
         }
         if (_.size(selectors.special) > 0) {
-            _.each(selectors.special, function(specialSelector) {
+            _.each(selectors.special, function (specialSelector) {
                 $(specialSelector).on(events, _.bind(handler, _module));
             });
         }
         if (_.size(selectors.cached) > 0) {
-            _.each(selectors.cached, function(cachedSelector) {
+            _.each(selectors.cached, function (cachedSelector) {
                 cachedSelector.on(events, _.bind(handler, _module));
             });
         }
     };
-    var checkEventsObject = function() {
+    var checkEventsObject = function () {
         var key;
         if (!_module.events) {
             return;

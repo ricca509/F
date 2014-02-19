@@ -20,32 +20,34 @@ F.defineModule('F.Tests.TestdomModule', {
     handleLink: function (ev) {
         ev.preventDefault();
     },
-    test: function() {
+    test: function () {
         console.log('Test called');
     },
-    init: function() {
+    init: function () {
         this.test();
         this.a = 10;
     }
 });
 
-beforeEach(function() {
+beforeEach(function () {
     $('body').append('<div id="dom-test-container"><div id="test"><div id="article-list">article-list</div><div id="more-button">more-button</div><ul id="list"><li class="list"><span>1</span></li><li class="list"><span>2</span></li><li class="list"><span>3</span></li><li class="list"><span>4</span></li><li class="list"><span>5</span></li></ul><a href="#">link</a></div><div id="outside">outside</div></div>');
 });
 
-afterEach(function() {
+//loadFixtures('dom-test.html');
+
+afterEach(function () {
     $('#dom-test-container').remove();
 });
 
-describe('The plugin F.plugins.domModule', function() {
-    it('converts the "el" selector in a jQuery element ($el)', function() {
+describe('The plugin F.plugins.domModule', function () {
+    it('converts the "el" selector in a jQuery element ($el)', function () {
 
         var instance = F.createInstance(F.Tests.TestdomModule);
         expect(instance.$el).toBeDefined();
         expect(instance.$el.length).toBe(1);
     });
 
-    it('converts the UI object in jQuery elements', function() {
+    it('converts the UI object in jQuery elements', function () {
         var instance = F.createInstance(F.Tests.TestdomModule);
         expect(instance.UI).toBeDefined();
         expect(instance.UI.articleList).toBe('#article-list');
@@ -53,19 +55,19 @@ describe('The plugin F.plugins.domModule', function() {
         expect(instance.UI.$articleList.length).toBe(1);
     });
 
-    it('adds a module.$ function as a shortcut to module.$el.find', function() {
+    it('adds a module.$ function as a shortcut to module.$el.find', function () {
         var instance = F.createInstance(F.Tests.TestdomModule);
         expect(instance.$).toBeDefined();
     });
 
-    it('make sure that module.$ finds only element in the scope of module.$el', function() {
+    it('make sure that module.$ finds only element in the scope of module.$el', function () {
         var instance = F.createInstance(F.Tests.TestdomModule);
         expect(instance.UI.$outside.length).toBe(0);
     });
 
-    it('binds events to selectors', function() {
+    it('binds events to selectors', function () {
         var test = 0, handlers = {
-            eventHandler: function(e) {
+            eventHandler: function (e) {
                 e.preventDefault();
                 test++;
             }
@@ -108,9 +110,9 @@ describe('The plugin F.plugins.domModule', function() {
         expect(test).toBe(4);
     });
 
-    it('binds events to the window object', function() {
+    it('binds events to the window object', function () {
         var test = 0, handlers = {
-            eventHandler: function(e) {
+            eventHandler: function (e) {
                 test++;
             }
         };
@@ -130,9 +132,9 @@ describe('The plugin F.plugins.domModule', function() {
 
     });
 
-    it('binds events to the document object', function() {
+    it('binds events to the document object', function () {
         var test = 0, handlers = {
-            eventHandler: function(e) {
+            eventHandler: function (e) {
                 test++;
             }
         };
@@ -151,7 +153,7 @@ describe('The plugin F.plugins.domModule', function() {
         expect(test).toBe(1);
     });
 
-    it('accept the name of the function (as a string) as event handler', function() {
+    it('accept the name of the function (as a string) as event handler', function () {
         var test = 0;
 
         F.defineModule('Tests.handlerTest', {
@@ -161,7 +163,7 @@ describe('The plugin F.plugins.domModule', function() {
                     'ul#list': 'handler'
                 }
             },
-            handler: function() {
+            handler: function () {
                 test++;
             }
         });
@@ -172,10 +174,10 @@ describe('The plugin F.plugins.domModule', function() {
         expect(test).toBe(1);
     });
 
-    it('accept a function as event handler', function() {
+    it('accept a function as event handler', function () {
         var test = 0, test2 = 0,
             handlers = {
-                eventHandler: function() {
+                eventHandler: function () {
                     test++;
                 }
             };
@@ -184,7 +186,7 @@ describe('The plugin F.plugins.domModule', function() {
             type: 'dom',
             events: {
                 'click': {
-                    'ul#list':  function() {
+                    'ul#list':  function () {
                         test2++;
                     },
                     '@#outside': handlers.eventHandler
@@ -203,7 +205,7 @@ describe('The plugin F.plugins.domModule', function() {
 
     });
 
-    it('does not update the $el if it is provided', function() {
+    it('does not update the $el if it is provided', function () {
         var $el = $('#list');
         F.defineModule('Tests.eventsMod.$elTest', {
             type: 'dom',

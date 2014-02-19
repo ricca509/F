@@ -9,7 +9,7 @@
 
     root = this;
 
-    resolveNamespace = function(module) {
+    resolveNamespace = function (module) {
         var ns, obj = window;
 
         if (_.isObject(module)) {
@@ -28,7 +28,7 @@
         return obj;
     };
 
-    initModule = function(module) {
+    initModule = function (module) {
         module.type = module.type || 'default';
         return module;
     };
@@ -73,7 +73,7 @@
         }
     };
 
-    F.extendModule = function(moduleA, moduleB, extendedNamespace, afterExtended) {
+    F.extendModule = function (moduleA, moduleB, extendedNamespace, afterExtended) {
         // An object or string shall be passed.
         var extendedModule;
         moduleA = resolveNamespace(moduleA);
@@ -91,7 +91,7 @@
         }
     };
 
-    F.createInstance = function(module, opts, onBeforeCreate, onAfterCreate) {
+    F.createInstance = function (module, opts, onBeforeCreate, onAfterCreate) {
         // An object or string shall be passed.
         module = resolveNamespace(module);
 
