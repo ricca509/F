@@ -18,7 +18,15 @@ module.exports = function(grunt) {
                 vendor: [
                     'libs/jquery/dist/jquery.min.js',
                     'libs/underscore/underscore-min.js'
-                ]
+                ],
+                host : 'http://127.0.0.1:3000/'
+            }
+        },
+        connect: {
+            test: {
+                options: {
+                    port: 3000
+                }
             }
         },
         concat: {
@@ -55,10 +63,12 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
+    grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks("grunt-jscs-checker");
 
     grunt.registerTask('default', ['jshint']);
     grunt.registerTask('build', ['jshint', 'jscs', 'concat', 'uglify:dist', 'jasmine']);
-    grunt.registerTask('test', ['jasmine']);
+    grunt.registerTask('style', ['jscs']);
+    grunt.registerTask('test', ['connect:test', 'jasmine']);
 
 };
