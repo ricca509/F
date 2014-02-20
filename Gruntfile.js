@@ -17,7 +17,8 @@ module.exports = function(grunt) {
                 specs: 'tests/jasmine/spec/*Spec.js',
                 vendor: [
                     'libs/jquery/dist/jquery.min.js',
-                    'libs/underscore/underscore-min.js'
+                    'libs/underscore/underscore-min.js',
+                    'libs/jasmine.async/lib/jasmine.async.min.js'
                 ],
                 host : 'http://127.0.0.1:3000/'
             }
@@ -26,6 +27,12 @@ module.exports = function(grunt) {
             test: {
                 options: {
                     port: 3000
+                }
+            },
+            forever: {
+                options: {
+                    port: 3000,
+                    keepalive: true
                 }
             }
         },

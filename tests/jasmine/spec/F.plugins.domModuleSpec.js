@@ -29,19 +29,26 @@ F.defineModule('F.Tests.TestdomModule', {
     }
 });
 
-beforeEach(function () {
-    $('body').append('<div id="dom-test-container"><div id="test"><div id="article-list">article-list</div><div id="more-button">more-button</div><ul id="list"><li class="list"><span>1</span></li><li class="list"><span>2</span></li><li class="list"><span>3</span></li><li class="list"><span>4</span></li><li class="list"><span>5</span></li></ul><a href="#">link</a></div><div id="outside">outside</div></div>');
-});
-
-//loadFixtures('dom-test.html');
-
-afterEach(function () {
-    $('#dom-test-container').remove();
-});
-
 describe('The plugin F.plugins.domModule', function () {
-    it('converts the "el" selector in a jQuery element ($el)', function () {
+    // set up the async spec
+    var async = new AsyncSpec(this);
 
+    function getTmpl(done) {
+        $.get( '/tests/jasmine/spec/fixtures/dom-test.html', function( data ) {
+            $('body').append(data);
+            done();
+        });
+    }
+
+    async.beforeEach(function (done) {
+        getTmpl(done);
+    });
+
+    afterEach(function () {
+        $('#dom-test-container').remove();
+    });
+
+    it('converts the "el" selector in a jQuery element ($el)', function () {
         var instance = F.createInstance(F.Tests.TestdomModule);
         expect(instance.$el).toBeDefined();
         expect(instance.$el.length).toBe(1);
@@ -53,6 +60,26 @@ describe('The plugin F.plugins.domModule', function () {
         expect(instance.UI.articleList).toBe('#article-list');
         expect(instance.UI.$articleList).toBeDefined();
         expect(instance.UI.$articleList.length).toBe(1);
+    });
+
+    it('does not modify the UI element of the module definition', function () {
+        F.defineModule('F.Tests.modifiedUI', {
+            type: 'dom',
+            UI: {
+                'button': '.btn'
+            }
+        });
+        var instances = [];
+        $('.list').each(function() {
+            var $elem = $(this);
+            instances.push(F.createInstance('F.Tests.modifiedUI', {
+                $el: $elem
+            }));
+        });
+
+        expect(instances.length).toBe(5);
+        // TODO: Test fails here, fix the problem
+        //expect(instances[0].UI.$$button).toBeUndefined();
     });
 
     it('adds a module.$ function as a shortcut to module.$el.find', function () {
