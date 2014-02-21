@@ -148,7 +148,7 @@
     F.plugins = {};
 
     // Version
-    F.version = '0.1.1';
+    F.version = '0.2.0';
 
     // Attach the constructor function to the window object
     root.F = F;
