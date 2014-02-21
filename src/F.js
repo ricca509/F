@@ -84,7 +84,7 @@
         }
 
         if (_.isObject(moduleA) && _.isObject(moduleB)) {
-            extendedModule = _.extend(moduleA, moduleB);
+            extendedModule = _.merge(moduleA, moduleB);
             F.defineModule(extendedNamespace, extendedModule, afterExtended);
         } else {
             throw 'F can only extend plain objects';
@@ -95,8 +95,8 @@
         // An object or string shall be passed.
         module = resolveNamespace(module);
 
-        var newMod = _.extend({}, module, opts),
-            handlerName = newMod.type + 'Module',
+        var newMod = _.merge({}, module, opts);
+        var handlerName = newMod.type + 'Module',
             moduleHandler = F.plugins[handlerName],
             decoratedModule;
 
@@ -148,7 +148,7 @@
     F.plugins = {};
 
     // Version
-    F.version = '0.10';
+    F.version = '0.1.1';
 
     // Attach the constructor function to the window object
     root.F = F;

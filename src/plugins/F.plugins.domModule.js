@@ -28,7 +28,7 @@
                 newSelectors['$' + key] = _module.$(_module.UI[key]);
             }
         }
-        _.extend(_module.UI, newSelectors);
+        _.merge(_module.UI, newSelectors);
     };
     var bindEvents = function () {
         var events;

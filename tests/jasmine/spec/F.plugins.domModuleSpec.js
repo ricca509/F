@@ -33,15 +33,15 @@ describe('The plugin F.plugins.domModule', function () {
     // set up the async spec
     var async = new AsyncSpec(this);
 
-    function getTmpl(done) {
-        $.get( '/tests/jasmine/spec/fixtures/dom-test.html', function( data ) {
+    function getFixture (done) {
+        $.get('/tests/jasmine/spec/fixtures/dom-test.html', function (data) {
             $('body').append(data);
             done();
         });
     }
 
     async.beforeEach(function (done) {
-        getTmpl(done);
+        getFixture(done);
     });
 
     afterEach(function () {
@@ -70,7 +70,7 @@ describe('The plugin F.plugins.domModule', function () {
             }
         });
         var instances = [];
-        $('.list').each(function() {
+        $('.list').each(function () {
             var $elem = $(this);
             instances.push(F.createInstance('F.Tests.modifiedUI', {
                 $el: $elem
@@ -78,8 +78,7 @@ describe('The plugin F.plugins.domModule', function () {
         });
 
         expect(instances.length).toBe(5);
-        // TODO: Test fails here, fix the problem
-        //expect(instances[0].UI.$$button).toBeUndefined();
+        expect(Object.keys(instances[0].UI).length).toBe(2);
     });
 
     it('adds a module.$ function as a shortcut to module.$el.find', function () {

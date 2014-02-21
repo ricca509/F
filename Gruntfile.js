@@ -17,7 +17,7 @@ module.exports = function(grunt) {
                 specs: 'tests/jasmine/spec/*Spec.js',
                 vendor: [
                     'libs/jquery/dist/jquery.min.js',
-                    'libs/underscore/underscore-min.js',
+                    'libs/lodash/dist/lodash.min.js',
                     'libs/jasmine.async/lib/jasmine.async.min.js'
                 ],
                 host : 'http://127.0.0.1:3000/'
@@ -48,7 +48,7 @@ module.exports = function(grunt) {
         watch: {
             dist: {
                 files: ['src/**/*.js'],
-                tasks: ['jshint', 'jscs', 'concat', 'uglify:dist', 'jasmine']
+                tasks: ['build']
             }
         },
         uglify: {
@@ -74,7 +74,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-jscs-checker");
 
     grunt.registerTask('default', ['jshint']);
-    grunt.registerTask('build', ['jshint', 'jscs', 'concat', 'uglify:dist', 'jasmine']);
+    grunt.registerTask('build', ['jshint', 'jscs', 'concat', 'uglify:dist', 'connect:test', 'jasmine']);
     grunt.registerTask('style', ['jscs']);
     grunt.registerTask('test', ['connect:test', 'jasmine']);
 
