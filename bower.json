@@ -1,11 +1,12 @@
 {
   "name": "F",
   "main": "dist/F.min.js",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "A small, modular library that helps writing structured, testable and namespaced code, plus providing DOM and utility helpers.",
   "authors": [
     "Riccardo Coppola <ricca509@gmail.com>"
   ],
+  "keywords": ["F.js", "module", "namespace"],
   "license": "MIT",
   "private": false,
   "ignore": [

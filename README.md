@@ -5,7 +5,7 @@
 The F library is built with the purpose of working on multiple page applications easier and faster, giving a structure to the code and allowing the developer to write structured and namespaced code in no time.
 
 ### Dependencies
-* underscore.js
+* Lo-Dash
 * jQuery (only if you use the *Dom* module)
 
 ### Install it
