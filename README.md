@@ -27,7 +27,7 @@ In your HTML page, include the dependencies and the library:
 
 ```html
 <script type="text/javascript" src="/libs/jquery.min.js"></script>
-<script type="text/javascript" src="/libs/underscore-min.js"></script>
+<script type="text/javascript" src="/libs/lodash.min.js"></script>
 <script type="text/javascript" src="/libs/F.min.js"></script>
 ```
 
