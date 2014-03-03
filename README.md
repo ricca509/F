@@ -2,7 +2,9 @@
 
 [![Build Status](https://travis-ci.org/ricca509/F.png?branch=master)](https://travis-ci.org/ricca509/F)
 
-The F library is built with the purpose of working on multiple page applications easier and faster, giving a structure to the code and allowing the developer to write structured and namespaced code in no time.
+A small	library	that mainly targets	all	those multiple pages (server side MVC) projects	that usually don’t have a structured javascript code due to the fact that	most of the	job	is done on the server but eventually end up with a load of unstructured, spaghetti code.
+
+The F library is built with the purpose of working on multiple page applications easier and faster, giving a structure to the code and allowing the developer to write structured, namespaced, testable code quickly and easily.
 
 ### Dependencies
 * Lo-Dash
