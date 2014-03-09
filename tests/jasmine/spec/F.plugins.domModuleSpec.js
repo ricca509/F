@@ -102,12 +102,14 @@ describe('The plugin F.plugins.domModule', function () {
             type: 'dom',
             el: '#test',
             UI: {
-                link: 'a[href="#"]'
+                link: 'a[href="#"]',
+                link1: 'a[href="#1"]'
             },
             events: {
                 'click': {
                     'ul#list>li.list span': 'eventHandler',
-                    'this.UI.link1, this.UI.link': 'eventHandler',
+                    'this.UI.link': 'eventHandler',
+                    'this.UI.$link1': 'eventHandler',
                     '@#outside': 'eventHandler'
                 },
                 'hover': {
@@ -127,13 +129,16 @@ describe('The plugin F.plugins.domModule', function () {
         evMod.UI.$link.trigger('click');
         expect(test).toBe(2);
 
+        evMod.UI.$link1.trigger('click');
+        expect(test).toBe(3);
+
         // Click on external element
         $('#outside').eq(0).trigger('click');
-        expect(test).toBe(3);
+        expect(test).toBe(4);
 
         // Hover on external element
         $('#outside').eq(0).trigger('hover');
-        expect(test).toBe(4);
+        expect(test).toBe(5);
     });
 
     it('binds events to the window object', function () {

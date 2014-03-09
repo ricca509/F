@@ -54,10 +54,13 @@
             document: document,
             window: window
         };
-        _.each(selectorsList, function (selector, idx) {
+        _.each(selectorsList, function (selector) {
             selector = F.str.trim(selector);
+            var internalSelName;
             if (selector.indexOf('this.') === 0) {
-                tmpEl = _module.UI['$' + _.last(selector.split('.'))];
+                internalSelName = _.last(selector.split('.'));
+                internalSelName = internalSelName.indexOf('$') > -1 ? internalSelName : '$' + internalSelName;
+                tmpEl = _module.UI[internalSelName];
                 if (tmpEl && tmpEl instanceof jQuery && !_.contains(cached, tmpEl)) {
                     cached.push(tmpEl);
                 }
