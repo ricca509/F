@@ -151,16 +151,16 @@ describe('The plugin F.plugins.domModule', function () {
 
         var evMod = F.createInstance({
             type: 'dom',
-            el: '#test',
+            el: 'form#test-form',
             events: {
-                'click': {
+                'submit': {
                     'this.el': 'eventHandler'
                 }
             },
             eventHandler: handlers.eventHandler
         });
 
-        evMod.$el.trigger('click');
+        evMod.$el.trigger('submit');
         expect(test).toBe(1);
     });
 
@@ -174,16 +174,16 @@ describe('The plugin F.plugins.domModule', function () {
 
         var evMod = F.createInstance({
             type: 'dom',
-            el: '#test',
+            el: 'form#test-form',
             events: {
-                'click': {
+                'submit': {
                     'this.$el': 'eventHandler'
                 }
             },
             eventHandler: handlers.eventHandler
         });
 
-        evMod.$el.trigger('click');
+        evMod.$el.trigger('submit');
         expect(test).toBe(1);
     });
 
