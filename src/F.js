@@ -2,31 +2,12 @@
     'use strict';
     // This is the constructor function. It will be attached to the window object
     // and executed every time we call F(...). Returns a new 'instance' of the library.
-    var root, resolveNamespace, initModule,
+    var root, initModule,
         F = function (args) {
             return new F.fn.init(args);
         };
 
     root = this;
-
-    resolveNamespace = function (module) {
-        var ns, obj = window;
-
-        if (_.isObject(module)) {
-            obj = module;
-        } else {
-            if (_.isString(module)) {
-                ns = module.split('.');
-                for (var i = 0, len = ns.length; i < len; ++i) {
-                    obj = obj[ns[i]];
-                }
-            } else {
-                throw 'You must pass an object or a namespace string';
-            }
-        }
-
-        return obj;
-    };
 
     initModule = function (module) {
         module.type = module.type || 'default';
@@ -44,6 +25,26 @@
 
             root[namespace] = this;
         }
+    };
+
+    F.resolveNamespace = function (module, ctx) {
+        var ns,
+            obj = ctx || window;
+
+        if (_.isObject(module)) {
+            obj = module;
+        } else {
+            if (_.isString(module)) {
+                ns = module.split('.');
+                for (var i = 0, len = ns.length; i < len; ++i) {
+                    obj = obj[ns[i]];
+                }
+            } else {
+                throw 'You must pass an object or a namespace string';
+            }
+        }
+
+        return obj;
     };
 
     // Defines an object in the given namespace
@@ -76,8 +77,8 @@
     F.extendModule = function (moduleA, moduleB, extendedNamespace, afterExtended) {
         // An object or string shall be passed.
         var extendedModule;
-        moduleA = resolveNamespace(moduleA);
-        moduleB = resolveNamespace(moduleB);
+        moduleA = F.resolveNamespace(moduleA);
+        moduleB = F.resolveNamespace(moduleB);
 
         if (moduleA.type && moduleB.type && moduleA.type !== moduleB.type) {
             throw 'Extend object with the same "type" property';
@@ -93,7 +94,7 @@
 
     F.createInstance = function (module, opts, onBeforeCreate, onAfterCreate) {
         // An object or string shall be passed.
-        module = resolveNamespace(module);
+        module = F.resolveNamespace(module);
 
         var newMod = _.merge({}, module, opts);
         var handlerName = newMod.type + 'Module',

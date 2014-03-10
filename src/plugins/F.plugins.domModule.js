@@ -56,11 +56,17 @@
         };
         _.each(selectorsList, function (selector) {
             selector = F.str.trim(selector);
-            var internalSelName;
+            var splitSelector;
             if (selector.indexOf('this.') === 0) {
-                internalSelName = _.last(selector.split('.'));
-                internalSelName = internalSelName.indexOf('$') > -1 ? internalSelName : '$' + internalSelName;
-                tmpEl = _module.UI[internalSelName];
+                splitSelector = selector.split('.');
+                // Remove the "this" from the selector
+                splitSelector = _.without(splitSelector, _.first(splitSelector));
+                // Add the $ to the last part of the selector if missing
+                splitSelector[splitSelector.length - 1] = _.last(splitSelector).indexOf('$') === 0 ?
+                    _.last(splitSelector) :
+                    '$' + _.last(splitSelector);
+                // Resolve the object given _module as context
+                tmpEl = F.resolveNamespace(splitSelector.join('.'), _module);
                 if (tmpEl && tmpEl instanceof jQuery && !_.contains(cached, tmpEl)) {
                     cached.push(tmpEl);
                 }

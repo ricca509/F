@@ -141,6 +141,52 @@ describe('The plugin F.plugins.domModule', function () {
         expect(test).toBe(5);
     });
 
+    it('binds events to the root element (el)', function () {
+        var test = 0, handlers = {
+            eventHandler: function (e) {
+                e.preventDefault();
+                test++;
+            }
+        };
+
+        var evMod = F.createInstance({
+            type: 'dom',
+            el: '#test',
+            events: {
+                'click': {
+                    'this.el': 'eventHandler'
+                }
+            },
+            eventHandler: handlers.eventHandler
+        });
+
+        evMod.$el.trigger('click');
+        expect(test).toBe(1);
+    });
+
+    it('binds events to the root element ($el)', function () {
+        var test = 0, handlers = {
+            eventHandler: function (e) {
+                e.preventDefault();
+                test++;
+            }
+        };
+
+        var evMod = F.createInstance({
+            type: 'dom',
+            el: '#test',
+            events: {
+                'click': {
+                    'this.$el': 'eventHandler'
+                }
+            },
+            eventHandler: handlers.eventHandler
+        });
+
+        evMod.$el.trigger('click');
+        expect(test).toBe(1);
+    });
+
     it('binds events to the window object', function () {
         var test = 0, handlers = {
             eventHandler: function (e) {
