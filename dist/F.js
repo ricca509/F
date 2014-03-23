@@ -350,7 +350,7 @@
             _module.$el.on(events, selectors.internal, _.bind(handler, _module));
         }
         if (_.size(selectors.external) > 0) {
-            $(selectors.external).on(events, _.bind(handler, _module));
+            $('body').on(events, selectors.external, _.bind(handler, _module));
         }
         if (_.size(selectors.special) > 0) {
             _.each(selectors.special, function (specialSelector) {

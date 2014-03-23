@@ -110,7 +110,7 @@ describe('The plugin F.plugins.domModule', function () {
                     'ul#list>li.list span': 'eventHandler',
                     'this.UI.link': 'eventHandler',
                     'this.UI.$link1': 'eventHandler',
-                    '@#outside': 'eventHandler'
+                    '@#outside, @#outside2, @#outside3, @#outside4-later': 'eventHandler'
                 },
                 'hover': {
                     '@#outside': 'eventHandler'
@@ -139,6 +139,20 @@ describe('The plugin F.plugins.domModule', function () {
         // Hover on external element
         $('#outside').eq(0).trigger('hover');
         expect(test).toBe(5);
+
+        // Click on external element
+        $('#outside2').eq(0).trigger('click');
+        expect(test).toBe(6);
+
+        // Click on external element
+        $('#outside3').eq(0).trigger('click');
+        expect(test).toBe(7);
+
+        $('#dom-test-container').append('<div id="outside4-later">outside4</div>');
+
+        // Click on external element
+        $('#outside4-later').eq(0).trigger('click');
+        expect(test).toBe(8);
     });
 
     it('binds events to the root element (el)', function () {
