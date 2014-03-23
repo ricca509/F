@@ -1,13 +1,24 @@
-;(function (undefined) {
+;(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define([], factory);
+    } else if (typeof exports === 'object') {
+        // Node. Does not work with strict CommonJS, but
+        // only CommonJS-like environments that support module.exports,
+        // like Node.
+        module.exports = factory();
+    } else {
+        // Browser globals (root is window)
+        root.F = factory();
+    }
+}(this, function (undefined) {
     'use strict';
     // This is the constructor function. It will be attached to the window object
     // and executed every time we call F(...). Returns a new 'instance' of the library.
-    var root, initModule,
+    var initModule,
         F = function (args) {
             return new F.fn.init(args);
         };
-
-    root = this;
 
     initModule = function (module) {
         module.type = module.type || 'default';
@@ -16,15 +27,6 @@
 
     // Exposed utility methods
     F.init = function (namespace) {
-        if (root.F) {
-            try {
-                delete root.F;
-            } catch (ex) {
-                root.F = undefined;
-            }
-
-            root[namespace] = this;
-        }
     };
 
     F.resolveNamespace = function (module, ctx) {
@@ -51,7 +53,7 @@
     F.defineModule = function (namespaces, module, afterDefined) {
         var i, l, baseObj;
 
-        baseObj = root;
+        baseObj = window;
         namespaces = namespaces.split(/\./);
         l = namespaces.length;
 
@@ -145,15 +147,15 @@
     // I return has all the methods declared for F
     F.fn.init.prototype = F.fn;
 
-    // Plugins object for extendibility
+    // Plugins object for extendability
     F.plugins = {};
 
     // Version
     F.version = '0.2.0';
 
     // Attach the constructor function to the window object
-    root.F = F;
-}).call(this);
+    return F;
+}));
 
 
 
