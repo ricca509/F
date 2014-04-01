@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/ricca509/F.png?branch=master)](https://travis-ci.org/ricca509/F)
 
-A small	library	that mainly targets	all	those multiple pages (server side MVC) projects	that usually don’t have a structured javascript code due to the fact that	most of the	job	is done on the server but eventually end up with a load of unstructured, spaghetti code.
+A small    library	that mainly targets	all	those multiple pages (server side MVC) projects	that usually don’t have a structured javascript code due to the fact that	most of the	job	is done on the server but eventually end up with a load of unstructured, spaghetti code.
 
 The F library is built with the purpose of working on multiple page applications easier and faster, giving a structure to the code and allowing the developer to write structured, namespaced, testable code quickly and easily.
 
@@ -31,6 +31,28 @@ In your HTML page, include the dependencies and the library:
 <script type="text/javascript" src="/libs/jquery.min.js"></script>
 <script type="text/javascript" src="/libs/lodash.min.js"></script>
 <script type="text/javascript" src="/libs/F.min.js"></script>
+```
+
+If you use AMD with RequireJS:
+
+```javascript
+define(['./path/to/F'], function (F) {
+    F.defineModule({});
+    ...
+});
+// or
+require(['./path/to/F'], function (F) {
+    F.defineModule({});
+    ...
+});
+```
+
+If you use Browserify:
+
+```javascript
+var F = require('./path/to/F');
+F.defineModule({});
+...
 ```
 
 ### Create namespaced objects (`F.defineModule`)
