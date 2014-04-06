@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="F : A small, modular library that helps writing structured, reusable, testable and namespaced javascript code. It also provides DOM and utility helpers." />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>F</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/ricca509/F">View on GitHub</a>
+
+          <h1 id="project_title">F</h1>
+          <h2 id="project_tagline">A small, modular library that helps writing structured, reusable, testable and namespaced javascript code. It also provides DOM and utility helpers.</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/ricca509/F/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/ricca509/F/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h2>
+<a name="f-a-library-to-namespace-structure-and-speed-up-your-javascript-code" class="anchor" href="#f-a-library-to-namespace-structure-and-speed-up-your-javascript-code"><span class="octicon octicon-link"></span></a>F: a library to namespace, structure and speed up your javascript code</h2>
+
+<p><a href="https://travis-ci.org/ricca509/F"><img src="https://travis-ci.org/ricca509/F.png?branch=master" alt="Build Status"></a></p>
+
+<p>A small    library  that mainly targets all those multiple pages (server side MVC) projects that usually don’t have a structured javascript code due to the fact that most of the job is done on the server but eventually end up with a load of unstructured, spaghetti code.</p>
+
+<p>The F library is built with the purpose of working on multiple page applications easier and faster, giving a structure to the code and allowing the developer to write structured, namespaced, testable code quickly and easily.</p>
+
+<h3>
+<a name="dependencies" class="anchor" href="#dependencies"><span class="octicon octicon-link"></span></a>Dependencies</h3>
+
+<ul>
+<li>Lo-Dash</li>
+<li>jQuery (only if you use the <em>Dom</em> module)</li>
+</ul><h3>
+<a name="install-it" class="anchor" href="#install-it"><span class="octicon octicon-link"></span></a>Install it</h3>
+
+<h4>
+<a name="with-bower" class="anchor" href="#with-bower"><span class="octicon octicon-link"></span></a>with Bower</h4>
+
+<pre><code>$ bower install F
+</code></pre>
+
+<h4>
+<a name="or-grab-the-latest-release" class="anchor" href="#or-grab-the-latest-release"><span class="octicon octicon-link"></span></a>or grab the latest release</h4>
+
+<p><a href="https://github.com/ricca509/F/releases">https://github.com/ricca509/F/releases</a></p>
+
+<h2>
+<a name="core-module" class="anchor" href="#core-module"><span class="octicon octicon-link"></span></a>Core module</h2>
+
+<p>Basic usage is the best way to show the library's features.</p>
+
+<h3>
+<a name="include-it-in-your-page" class="anchor" href="#include-it-in-your-page"><span class="octicon octicon-link"></span></a>Include it in your page</h3>
+
+<p>In your HTML page, include the dependencies and the library:</p>
+
+<div class="highlight highlight-html"><pre><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span> <span class="na">src=</span><span class="s">"/libs/jquery.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span> <span class="na">src=</span><span class="s">"/libs/lodash.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span> <span class="na">src=</span><span class="s">"/libs/F.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+</pre></div>
+
+<p>If you use AMD with RequireJS:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">define</span><span class="p">([</span><span class="s1">'./path/to/F'</span><span class="p">],</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">F</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">F</span><span class="p">.</span><span class="nx">defineModule</span><span class="p">({});</span>
+    <span class="p">...</span>
+<span class="p">});</span>
+<span class="c1">// or</span>
+<span class="nx">require</span><span class="p">([</span><span class="s1">'./path/to/F'</span><span class="p">],</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">F</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">F</span><span class="p">.</span><span class="nx">defineModule</span><span class="p">({});</span>
+    <span class="p">...</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>If you use Browserify:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">F</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'./path/to/F'</span><span class="p">);</span>
+<span class="nx">F</span><span class="p">.</span><span class="nx">defineModule</span><span class="p">({});</span>
+<span class="p">...</span>
+</pre></div>
+
+<h3>
+<a name="create-namespaced-objects-fdefinemodule" class="anchor" href="#create-namespaced-objects-fdefinemodule"><span class="octicon octicon-link"></span></a>Create namespaced objects (<code>F.defineModule</code>)</h3>
+
+<p><strong>Method signature:</strong></p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">F</span><span class="p">.</span><span class="nx">defineModule</span><span class="p">(</span><span class="nx">namespaceToCreate</span><span class="p">,</span> <span class="nx">object</span><span class="p">,</span> <span class="nx">afterDefinedCallback</span><span class="p">);</span>
+</pre></div>
+
+<p><strong>Create a namespace</strong> from a string:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">F</span><span class="p">.</span><span class="nx">defineModule</span><span class="p">(</span><span class="s1">'F.Tests.Module1'</span><span class="p">);</span>
+</pre></div>
+
+<p>Every object (or module) created with the F library has a <code>type</code> property. If you do not specify one, the library add <code>default</code> for you:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="o">&gt;</span> <span class="nx">F</span><span class="p">.</span><span class="nx">Tests</span><span class="p">.</span><span class="nx">Module1</span><span class="p">;</span>
+<span class="nb">Object</span> <span class="p">{</span><span class="nx">type</span><span class="o">:</span> <span class="s2">"default"</span><span class="p">}</span>
+</pre></div>
+
+<p>You can pass an <strong>object</strong> to define the structure of your module:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">F</span><span class="p">.</span><span class="nx">defineModule</span><span class="p">(</span><span class="s1">'F.Tests.testObject'</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">defaults</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">numArticles</span><span class="o">:</span> <span class="mi">5</span>
+    <span class="p">},</span>
+    <span class="nx">handleLink</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">ev</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">ev</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
+    <span class="p">},</span>
+    <span class="nx">test</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Test called'</span><span class="p">);</span>
+    <span class="p">},</span>
+    <span class="nx">init</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">test</span><span class="p">();</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">a</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="c1">// In the console:</span>
+<span class="o">&gt;</span> <span class="nx">F</span><span class="p">.</span><span class="nx">Tests</span><span class="p">.</span><span class="nx">testObject</span>
+<span class="nb">Object</span> <span class="p">{</span><span class="nx">defaults</span><span class="o">:</span> <span class="nb">Object</span><span class="p">,</span> <span class="nx">handleLink</span><span class="o">:</span> <span class="kd">function</span><span class="p">,</span> <span class="nx">test</span><span class="o">:</span> <span class="kd">function</span><span class="p">,</span> <span class="nx">init</span><span class="o">:</span> <span class="kd">function</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s2">"default"</span><span class="p">}</span>
+</pre></div>
+
+<p>or a <strong>function</strong>:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">F</span><span class="p">.</span><span class="nx">defineModule</span><span class="p">(</span><span class="s1">'F.Tests.testFunction'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">c</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// stuff</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="nx">doSomething</span><span class="o">:</span> <span class="nx">c</span>
+    <span class="p">};</span>
+<span class="p">});</span>
+
+<span class="c1">// In the console:</span>
+<span class="o">&gt;</span> <span class="nx">F</span><span class="p">.</span><span class="nx">Tests</span><span class="p">.</span><span class="nx">testFunction</span>
+<span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">c</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// stuff</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="nx">doSomething</span><span class="o">:</span> <span class="nx">c</span>
+    <span class="p">};</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>or a <strong>variable</strong>:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">F</span><span class="p">.</span><span class="nx">defineModule</span><span class="p">(</span><span class="s1">'F.Tests.testVariable'</span><span class="p">,</span> <span class="s1">'variableValue'</span><span class="p">);</span>
+
+<span class="c1">// In the console:</span>
+<span class="o">&gt;</span> <span class="nx">F</span><span class="p">.</span><span class="nx">Tests</span><span class="p">.</span><span class="nx">testVariable</span>
+<span class="s2">"variableValue"</span>
+</pre></div>
+
+<h3>
+<a name="extend-your-modules-fextendmodule" class="anchor" href="#extend-your-modules-fextendmodule"><span class="octicon octicon-link"></span></a>Extend your modules (<code>F.extendModule</code>)</h3>
+
+<p>You can extend your modules (only object modules at the moment). This allows you to create reusable modules and make you code simpler, easier to test and debug.</p>
+
+<p><strong>Method signature:</strong></p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">F</span><span class="p">.</span><span class="nx">extendModule</span><span class="p">(</span><span class="nx">moduleToExtend</span><span class="p">,</span> <span class="nx">moduleThatExtends</span><span class="p">,</span> <span class="nx">extendedModuleNamespace</span><span class="p">,</span> <span class="nx">afterExtendedCallback</span><span class="p">)</span>
+</pre></div>
+
+<p><strong>Extend a module with an object:</strong></p>
+
+<div class="highlight highlight-javascript"><pre><span class="c1">// Define an object module "F.objA"</span>
+<span class="nx">F</span><span class="p">.</span><span class="nx">defineModule</span><span class="p">(</span><span class="s1">'F.objA'</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">one</span><span class="o">:</span> <span class="s1">'string'</span><span class="p">,</span>
+    <span class="nx">two</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="s1">'function two'</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="c1">// Create a new module "F.newExtendedModule"</span>
+<span class="c1">// extending "F.objA" with a plain object</span>
+<span class="nx">F</span><span class="p">.</span><span class="nx">extendModule</span><span class="p">(</span><span class="s1">'F.objA'</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">three</span><span class="o">:</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="nx">four</span><span class="o">:</span> <span class="kc">true</span>
+<span class="p">},</span> <span class="s1">'F.newExtendedModule'</span><span class="p">);</span>
+</pre></div>
+
+<p><strong>Extend a plain object with another one:</strong></p>
+
+<div class="highlight highlight-javascript"><pre><span class="c1">// Create a new module "F.newExtendedModule"</span>
+<span class="c1">// from two plain objects </span>
+<span class="c1">// (the extended object will have the "type" property set to "default")</span>
+<span class="nx">F</span><span class="p">.</span><span class="nx">extendModule</span><span class="p">({</span>
+        <span class="nx">a</span><span class="o">:</span> <span class="s1">'1'</span><span class="p">,</span>
+        <span class="nx">b</span><span class="o">:</span> <span class="s1">'2'</span>
+    <span class="p">},</span> <span class="p">{</span>
+        <span class="nx">c</span><span class="o">:</span> <span class="s1">'3'</span><span class="p">,</span>
+        <span class="nx">d</span><span class="o">:</span> <span class="s1">'4'</span>
+<span class="p">},</span> <span class="s1">'F.newExtendedModule'</span><span class="p">);</span>
+</pre></div>
+
+<h3>
+<a name="create-instances-of-your-objects-fcreateinstance" class="anchor" href="#create-instances-of-your-objects-fcreateinstance"><span class="octicon octicon-link"></span></a>Create instances of your objects (<code>F.createInstance</code>)</h3>
+
+<p>Once you have created a <strong>module</strong>, you can create <strong>instances</strong> of it, similar to the <em>Class &gt; Object</em> relationship:</p>
+
+<p><strong>Method signature:</strong></p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">F</span><span class="p">.</span><span class="nx">createInstance</span><span class="p">(</span><span class="nx">module</span><span class="p">,</span> <span class="nx">opts</span><span class="p">,</span> <span class="nx">onBeforeCreate</span><span class="p">,</span> <span class="nx">onAfterCreate</span><span class="p">)</span>
+</pre></div>
+
+<p>Example:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">instance</span> <span class="o">=</span> <span class="nx">F</span><span class="p">.</span><span class="nx">createInstance</span><span class="p">(</span><span class="nx">F</span><span class="p">.</span><span class="nx">Tests</span><span class="p">.</span><span class="nx">TestModule</span><span class="p">);</span>
+</pre></div>
+
+<p>You can create instances of an existing module passing the string representing the namespace or the object itself</p>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">instance</span> <span class="o">=</span> <span class="nx">F</span><span class="p">.</span><span class="nx">createInstance</span><span class="p">(</span><span class="s1">'F.Tests.TestModule'</span><span class="p">);</span>
+</pre></div>
+
+<p>You can <strong>extend the standard instance</strong> of a module with additional configuration. Your configuration will be applied to your instance, without modifying the default definition of the module:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">instance</span> <span class="o">=</span> <span class="nx">F</span><span class="p">.</span><span class="nx">createInstance</span><span class="p">(</span><span class="nx">F</span><span class="p">.</span><span class="nx">Tests</span><span class="p">.</span><span class="nx">UIModule</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">el</span><span class="o">:</span> <span class="s1">'body'</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>Every time you create an instance of a module, the F library calls <code>onBefore</code> and <code>onAfter</code> callbacks if provided. The complete call for the <code>createInstance</code> function is the following:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">instance</span> <span class="o">=</span> <span class="nx">F</span><span class="p">.</span><span class="nx">createInstance</span><span class="p">(</span><span class="nx">moduleToCreateInstanceFrom</span><span class="p">,</span> <span class="nx">extendObject</span><span class="p">,</span> <span class="nx">onBefore</span><span class="p">,</span> <span class="nx">onAfter</span><span class="p">);</span>
+</pre></div>
+
+<h4>
+<a name="the-init-function" class="anchor" href="#the-init-function"><span class="octicon octicon-link"></span></a>The <code>init</code> function</h4>
+
+<p>If you define a <code>init</code> function within your module, it <strong>will run as soon as you create an instance</strong> of the module via the <code>F.createInstance</code>.</p>
+
+<p>The <em>core F library</em> is pretty much this: a simple way to create namespaces that contain variables, object or functions and create instances of them. This helps maintaining a <strong>structured, globals-free code</strong>.</p>
+
+<p>The power of the library is the fact that, by using a generic modular system, you can define your own module type and let the library call it for you. The next section explore the modules echosystem.</p>
+
+<h3>
+<a name="helpers-functions" class="anchor" href="#helpers-functions"><span class="octicon octicon-link"></span></a>Helpers functions</h3>
+
+<p>While the core of the library will remain small by purpose, there are "addons" that extends it. The following functions are available:</p>
+
+<p><strong>Core</strong></p>
+
+<ul>
+<li><code>F.defineModule(namespaceToCreate, object, afterDefinedCallback);</code></li>
+<li><code>F.extendModule(moduleToExtend, moduleThatExtends, extendedModuleNamespace, afterExtendedCallback)</code></li>
+<li><code>F.createInstance(module, opts, onBeforeCreate, onAfterCreate)</code></li>
+</ul><p><strong>String addon <code>F.str</code></strong></p>
+
+<ul>
+<li><code>F.str.trimStart(str)</code></li>
+<li><code>F.str.trimEnd(str)</code></li>
+<li><code>F.str.trim(str)</code></li>
+</ul><p><strong>Events: Publisher/Subscriber addon <code>F.evt</code></strong></p>
+
+<ul>
+<li><code>F.evt.on(topic, callback)</code></li>
+<li><code>F.evt.off(topic, index)</code></li>
+<li><code>F.evt.trigger(topic, args)</code></li>
+</ul><h2>
+<a name="addons" class="anchor" href="#addons"><span class="octicon octicon-link"></span></a>Addons</h2>
+
+<h3>
+<a name="events-publishersubscriber-fevt" class="anchor" href="#events-publishersubscriber-fevt"><span class="octicon octicon-link"></span></a>Events Publisher/Subscriber <code>F.evt</code>
+</h3>
+
+<p>An events addon can be found under <code>F.evt</code>.</p>
+
+<h4>
+<a name="the-on-method" class="anchor" href="#the-on-method"><span class="octicon octicon-link"></span></a>The <code>on</code> method</h4>
+
+<p>You can subscribe to an event with the <code>on</code> method. You have to pass the event name and a callback.</p>
+
+<p><code>F.evt.on(topic, callback)</code></p>
+
+<p>returns an index, that can be used to unscribe from the event.</p>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">key</span> <span class="o">=</span> <span class="nx">F</span><span class="p">.</span><span class="nx">evt</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'test'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">args</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Test '</span> <span class="o">+</span> <span class="nx">args</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<h4>
+<a name="the-trigger-method" class="anchor" href="#the-trigger-method"><span class="octicon octicon-link"></span></a>The <code>trigger</code> method</h4>
+
+<p>You can trigger an event with the <code>trigger</code> method, it accepts the name of the event and the arguments you want to publish with the event.</p>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">key</span> <span class="o">=</span> <span class="nx">F</span><span class="p">.</span><span class="nx">evt</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'test'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">args</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Test '</span> <span class="o">+</span> <span class="nx">args</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">F</span><span class="p">.</span><span class="nx">evt</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">'test'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'one'</span><span class="p">,</span> <span class="s1">'two'</span><span class="p">]);</span>
+</pre></div>
+
+<h4>
+<a name="the-off-method" class="anchor" href="#the-off-method"><span class="octicon octicon-link"></span></a>The <code>off</code> method</h4>
+
+<p>You can unscribe from an event using the event name and the <code>index</code> returned by the <code>on</code> method.</p>
+
+<p><code>F.evt.off(topic, index)</code></p>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">key</span> <span class="o">=</span> <span class="nx">F</span><span class="p">.</span><span class="nx">evt</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'test'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">args</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Test '</span> <span class="o">+</span> <span class="nx">args</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">F</span><span class="p">.</span><span class="nx">evt</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">'test'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'one'</span><span class="p">,</span> <span class="s1">'two'</span><span class="p">]);</span>
+
+<span class="nx">F</span><span class="p">.</span><span class="nx">evt</span><span class="p">.</span><span class="nx">off</span><span class="p">(</span><span class="s1">'test'</span><span class="p">,</span> <span class="nx">key</span><span class="p">);</span>
+</pre></div>
+
+<h2>
+<a name="the-modules-ecosystem" class="anchor" href="#the-modules-ecosystem"><span class="octicon octicon-link"></span></a>The modules ecosystem</h2>
+
+<h3>
+<a name="the-dom-module-type-dom" class="anchor" href="#the-dom-module-type-dom"><span class="octicon octicon-link"></span></a>The <em>dom</em> module (<code>type: 'dom'</code>)</h3>
+
+<p>The <em>dom</em> module makes it easy to work with DOM related stuff. It offers:</p>
+
+<ul>
+<li>declarative event binding</li>
+<li>auto scoping to a root element</li>
+<li>selectors caching (UI declaration)</li>
+<li>jQuery shortcuts</li>
+</ul><p>Make sure to define the right <code>type</code> property when you define your module if you want to use the features of the <em>dom</em> module:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">F</span><span class="p">.</span><span class="nx">defineModule</span><span class="p">(</span><span class="s1">'F.Tests.DomModule'</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s1">'dom'</span>
+<span class="p">});</span>
+</pre></div>
+
+<h4>
+<a name="the-el-element" class="anchor" href="#the-el-element"><span class="octicon octicon-link"></span></a>The <code>el</code> element</h4>
+
+<p>As in Backbone.js views, the <code>el</code> element represent the root element of the module: every operation within the module will be scoped to this element. If you don't declare any 'el', the module will use 'body'.</p>
+
+<h4>
+<a name="the-el-element-1" class="anchor" href="#the-el-element-1"><span class="octicon octicon-link"></span></a>The <code>$el</code> element</h4>
+
+<p>The module automatically creates a <code>$el</code> element, which is a jQuery wrapped element of the <code>el</code> element. If you declare both <code>$el</code> and <code>el</code>, the <code>$el</code> will win and <code>el</code> will be set to <code>$el.selector</code>.</p>
+
+<h4>
+<a name="the-this-function" class="anchor" href="#the-this-function"><span class="octicon octicon-link"></span></a>The <code>this.$()</code> function</h4>
+
+<p>Every operation within the module has to be done in the scope of the <code>el</code> element. To achieve this, you can use the <code>this.$()</code> function. This is the same as using <code>this.$el.find()</code> or <code>$(el).find()</code>.</p>
+
+<h4>
+<a name="the-ui-object" class="anchor" href="#the-ui-object"><span class="octicon octicon-link"></span></a>The <code>UI</code> object</h4>
+
+<p>If you want to have a 'shortcut' to often used elements and want the module to cache them for you, you have to use the <code>UI</code> object. It is pretty straightforward:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">UI</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">articleList</span><span class="o">:</span> <span class="s1">'#article-list'</span><span class="p">,</span>
+    <span class="nx">moreButton</span><span class="o">:</span> <span class="s1">'#more-button'</span><span class="p">,</span>
+    <span class="nx">outside</span><span class="o">:</span> <span class="s1">'#outside'</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>The key is the shortcut name, the value is the jQuery CSS selector. You'll be able to access the elements with <code>this.UI.name</code>.
+For every key in the UI object, as soon as you'll create an instance of the object you will get the jQuery oject associated to that selector. You can access the jQuery object by preceding the name with a $:</p>
+
+<p>(string selector) <code>this.UI.articleList</code> -&gt; (jQuery object) <code>this.UI.$articleList</code></p>
+
+<h4>
+<a name="the-events-object" class="anchor" href="#the-events-object"><span class="octicon octicon-link"></span></a>The <code>events</code> object</h4>
+
+<p>The declarative event binding is achieved by using the <code>events</code> object:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">events</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s1">'click'</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s1">'ul#list&gt;li.list span'</span><span class="o">:</span> <span class="s1">'handleLink'</span>
+    <span class="p">}</span> 
+<span class="p">}</span>
+</pre></div>
+
+<p>The properties of the "events" object are always the event (or events) name (<code>click</code>, in this case). 
+The value of each property is an object itself. The left side contains the selector as key.
+On the right side, we have the name of the handler function as value, that has to be declared inside the module.</p>
+
+<p><strong>Selectors type and syntax</strong></p>
+
+<ul>
+<li>
+<strong>Normal</strong> jQuery CSS selector, <strong>scoped</strong> to the el element: just write the plain jQuery selector.</li>
+</ul><div class="highlight highlight-javascript"><pre><span class="nx">events</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s1">'click'</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s1">'   ul#list&gt;li.list span'</span><span class="o">:</span> <span class="s1">'handleLink'</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+<ul>
+<li>
+<strong>Cached</strong> element, defined in the UI object: use the normal object sintax.</li>
+</ul><div class="highlight highlight-javascript"><pre><span class="nx">events</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s1">'click'</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s1">'this.UI.link1'</span><span class="o">:</span> <span class="s1">'handleLink'</span>
+    <span class="p">}</span> 
+<span class="p">}</span>
+</pre></div>
+
+<ul>
+<li>
+<strong>External</strong> element, access elements outside el, 'document' and window included: prepend the <code>@</code> symbol before the CSS selector (or <code>@window</code>, <code>@document</code>)</li>
+</ul><div class="highlight highlight-javascript"><pre><span class="nx">events</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s1">'click'</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s1">'@#outside'</span><span class="o">:</span> <span class="s1">'handleLink'</span><span class="p">,</span>
+        <span class="s1">'@document'</span><span class="o">:</span> <span class="s1">'handleLink'</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+<h3>
+<a name="complete-example" class="anchor" href="#complete-example"><span class="octicon octicon-link"></span></a>Complete example</h3>
+
+<p>The complete list of properties for the <em>domModule</em> follows:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">F</span><span class="p">.</span><span class="nx">defineModule</span><span class="p">(</span><span class="s1">'F.Tests.DomModule1'</span><span class="p">,</span> <span class="p">{</span>
+    <span class="c1">// Always define the type property correctly</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s1">'dom'</span><span class="p">,</span>
+    <span class="c1">// Define the root element of your module.</span>
+    <span class="c1">// The module will have the scope restricted to this element</span>
+    <span class="c1">// for increased security</span>
+    <span class="c1">// The module will create a $el variable with the jQuery element</span>
+    <span class="c1">// representing your root element</span>
+    <span class="nx">el</span><span class="o">:</span> <span class="s1">'#test'</span><span class="p">,</span>
+    <span class="c1">// Define the jQuery elements that you want to cache by declaring their</span>
+    <span class="c1">// selectors here, the module will create variables inside this object</span>
+    <span class="c1">// with a $ prefix and a jQuery object for you</span>
+    <span class="c1">// e.g. (articleList -&gt; $articleList)</span>
+    <span class="nx">UI</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">articleList</span><span class="o">:</span> <span class="s1">'#article-list'</span><span class="p">,</span>
+        <span class="nx">moreButton</span><span class="o">:</span> <span class="s1">'#more-button'</span><span class="p">,</span>
+        <span class="nx">outside</span><span class="o">:</span> <span class="s1">'#outside'</span>
+    <span class="p">},</span>
+    <span class="c1">// Declarative event binding</span>
+    <span class="nx">events</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s1">'click'</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s1">'ul#list&gt;li.list span, this.UI.moreButton, @#outside'</span><span class="o">:</span> <span class="s1">'handleLink'</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nx">handleLink</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">ev</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">ev</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
+    <span class="p">},</span>
+    <span class="nx">test</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Test called'</span><span class="p">);</span>
+    <span class="p">},</span>
+    <span class="c1">// The init function, if present, is automatically called by the</span>
+    <span class="c1">// createInstance function for you. Write here the code that you want to </span>
+    <span class="c1">// run when the module is instantiated</span>
+    <span class="nx">init</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+
+<h2>
+<a name="writing-a-module" class="anchor" href="#writing-a-module"><span class="octicon octicon-link"></span></a>Writing a module</h2>
+
+<p>Defining a new module is easy and make it possible to extend the <em>F core</em>, which is small by intention.</p>
+
+<h3>
+<a name="pick-up-a-name" class="anchor" href="#pick-up-a-name"><span class="octicon octicon-link"></span></a>Pick up a name</h3>
+
+<p>The first step is to pick up a name for the module. Let's assume we want to create the <code>fooModule</code>. When defining a module of this type, we will have to define the <code>type</code> property to be <code>foo</code>:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">F</span><span class="p">.</span><span class="nx">defineModule</span><span class="p">(</span><span class="s1">'F.Tests.fooModule1'</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s1">'foo'</span><span class="p">,</span>
+    <span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>The <em>F core</em> library, reading the <code>type</code> property of the module (<code>test</code>), will search under <code>F.plugins</code> an object called <code>fooModule</code> (<code>F.plugins.fooModule</code>).</p>
+
+<h3>
+<a name="define-the-initmodule-function" class="anchor" href="#define-the-initmodule-function"><span class="octicon octicon-link"></span></a>Define the <code>initModule</code> function</h3>
+
+<p>The <code>F.plugins.fooModule</code> will have to expose the <code>initModule</code> function. It will be passed an instance of the object, and will have to return it (after having modified it).</p>
+
+<p>An example of an <code>initModule</code> defined for our <code>F.plugins.fooModule</code> function is as follows:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">F</span><span class="p">)</span> <span class="p">{</span>
+    <span class="s1">'use strict'</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">_module</span><span class="p">;</span>
+
+    <span class="kd">var</span> <span class="nx">initModule</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">module</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">_module</span> <span class="o">=</span> <span class="nx">module</span><span class="p">;</span>
+        <span class="k">return</span> <span class="nx">_module</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="nx">F</span><span class="p">.</span><span class="nx">plugins</span><span class="p">.</span><span class="nx">defaultModule</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">initModule</span><span class="o">:</span> <span class="nx">initModule</span>
+    <span class="p">};</span>
+<span class="p">}(</span><span class="nx">F</span><span class="p">));</span>
+</pre></div>
+
+<p>You can find an example under <code>/src/plugins/F.plugins.defaultModule.js</code></p>
+
+<h3>
+<a name="create-a-plugin-file-for-the-module-and-include-it-in-your-page" class="anchor" href="#create-a-plugin-file-for-the-module-and-include-it-in-your-page"><span class="octicon octicon-link"></span></a>Create a plugin file for the module and include it in your page</h3>
+
+<p>The best place for the <code>F.plugins.fooModule</code> is in a file named <code>F.plugins.fooModule.js</code>. </p>
+
+<p>Be sure to include it after the main F include.</p>
+
+<div class="highlight highlight-html"><pre><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span> <span class="na">src=</span><span class="s">"/libs/jquery.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span> <span class="na">src=</span><span class="s">"/libs/underscore-min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span> <span class="na">src=</span><span class="s">"/libs/F.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span> <span class="na">src=</span><span class="s">"/libs/F.plugins.fooModule.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+</pre></div>
+
+<h3>
+<a name="thats-it" class="anchor" href="#thats-it"><span class="octicon octicon-link"></span></a>That's it!</h3>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">F maintained by <a href="https://github.com/ricca509">ricca509</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
