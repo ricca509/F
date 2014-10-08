@@ -103,7 +103,7 @@ F.defineModule('F.Tests.testFunction', function() {
     var c = function() {
         // stuff
     }
-    
+
     return {
         doSomething: c
     };
@@ -116,7 +116,7 @@ function () {
     var c = function() {
         // stuff
     }
-    
+
     return {
         doSomething: c
     };
@@ -160,7 +160,7 @@ F.extendModule('F.objA', {
 **Extend a plain object with another one:**
 ```javascript
 // Create a new module "F.newExtendedModule"
-// from two plain objects 
+// from two plain objects
 // (the extended object will have the "type" property set to "default")
 F.extendModule({
         a: '1',
@@ -321,10 +321,10 @@ The declarative event binding is achieved by using the `events` object:
 events: {
     'click': {
         'ul#list>li.list span': 'handleLink'
-    } 
+    }
 }
 ```
-The properties of the "events" object are always the event (or events) name (`click`, in this case). 
+The properties of the "events" object are always the event (or events) name (`click`, in this case).
 The value of each property is an object itself. The left side contains the selector as key.
 On the right side, we have the name of the handler function as value, that has to be declared inside the module.
 
@@ -344,7 +344,7 @@ events: {
 events: {
     'click': {
         'this.UI.link1': 'handleLink'
-    } 
+    }
 }
 ```
 - **External** element, access elements outside el, 'document' and window included: prepend the `@` symbol before the CSS selector (or `@window`, `@document`)
@@ -393,7 +393,7 @@ F.defineModule('F.Tests.DomModule1', {
         console.log('Test called');
     },
     // The init function, if present, is automatically called by the
-    // createInstance function for you. Write here the code that you want to 
+    // createInstance function for you. Write here the code that you want to
     // run when the module is instantiated
     init: function() {
     }
@@ -425,7 +425,7 @@ An example of an `initModule` defined for our `F.plugins.fooModule` function is 
 (function(F) {
     'use strict';
     var _module;
-    
+
     var initModule = function (module) {
         _module = module;
         return _module;
@@ -440,7 +440,7 @@ An example of an `initModule` defined for our `F.plugins.fooModule` function is 
 You can find an example under ` /src/plugins/F.plugins.defaultModule.js`
 
 ### Create a plugin file for the module and include it in your page
-The best place for the `F.plugins.fooModule` is in a file named `F.plugins.fooModule.js`. 
+The best place for the `F.plugins.fooModule` is in a file named `F.plugins.fooModule.js`.
 
 Be sure to include it after the main F include.
 
